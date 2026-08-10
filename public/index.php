@@ -59,8 +59,7 @@ echo '<hr>Ultimo ID inserido'.$db->ultimoIdInserido();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= APP_NAME ?> </title>
     
-    <link rel="stylesheet" href="<?=URL?>/public/bootstrap/css/bootstrap.min.css"/>
-    <script src="<?=URL?>/public/boostrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="public\css\estilo.css">
 </head>
 <body>
     <?php

@@ -1,18 +1,33 @@
 <header>
     <div class="container">
-        <nav class="navbar sidebar">
+        <nav class="sidebar">
             <a class="navbar-brand" href="<?=URL?>"><img src="" alt=""></a>
-            <div class="" id="">
-                <!-- Menu alinhado à esquerda -->
-                <ul class="navbar-nav mr-auto">
+            <div class="navbar">
+                <div class="search-container">
+                    <input type="text" placeholder="Buscar" class="search-input">
+                    <img class="search-icon" src="public\img\search.png" alt="Buscar">
+                </div>
+                <ul class="nav-list">   
                     <li class="nav-item">
-                        <a class="nav-link" href="<?=URL?>" data-tooltip="tooltip" title="Página Inicial">Home</a>
+                        <a class="nav-link" href="<?=URL?>" data-tooltip="tooltip" title="Página Inicial"><img class="nav-img" src="public\img\home.png" alt=""><span class="nav-text">Início</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?=URL?>/paginas/sobre" data-tooltip="tooltip" title="Sobre nós">Sobre nós</a>
+                        <a class="nav-link" href="<?=URL?>" data-tooltip="tooltip" title="Página Inicial"><img class="nav-img" src="public\img\calendar.png" alt=""><span class="nav-text">Calendário</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?=URL?>/paginas/contato" data-tooltip="tooltip" title="contato">Contato</a>
+                        <a class="nav-link" href="<?=URL?>" data-tooltip="tooltip" title="Página Inicial"><img class="nav-img" src="public\img\idea.png" alt=""><span class="nav-text">RDD - Sugestões</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?=URL?>" data-tooltip="tooltip" title="Página Inicial"><img class="nav-img" src="public\img\megaphone.png" alt=""><span class="nav-text">Avisos</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?=URL?>" data-tooltip="tooltip" title="Página Inicial"><img class="nav-img" src="public\img\notification.png" alt=""><span class="nav-text">Notificações</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?=URL?>" data-tooltip="tooltip" title="Página Inicial"><img class="nav-img" src="public\img\perfil-de-usuario.png" alt=""><span class="nav-text">Perfil</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?=URL?>" data-tooltip="tooltip" title="Página Inicial"><img class="nav-img" src="public\img\setting.png" alt=""><span class="nav-text">Configurações</span></a>
                     </li>
                 </ul>
             </div>
