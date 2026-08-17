@@ -67,5 +67,18 @@ echo '<hr>Ultimo ID inserido'.$db->ultimoIdInserido();
     $rotas = new Rota();
    // $rotas->url();
     ?>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const currentUrl = window.location.href;
+            const navLinks = document.querySelectorAll(".nav-link");
+
+            navLinks.forEach(link => {
+                if (link.href === currentUrl) {
+                    link.classList.add("active");
+                    link.setAttribute("aria-current", "page"); 
+                }
+            });
+        });
+    </script>
 </body>
 </html>

@@ -9,7 +9,7 @@
                 </div>
                 <ul class="nav-list">   
                     <li class="nav-item">
-                        <a class="nav-link" href="<?=URL?>" data-tooltip="tooltip" title="Página Inicial"><img class="nav-img" src="public\img\home.png" alt=""><span class="nav-text">Início</span></a>
+                        <a class="nav-link active" href="<?=URL?>" data-tooltip="tooltip" title="Página Inicial"><img class="nav-img" src="public\img\home.png" alt=""><span class="nav-text">Início</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<?=URL?>" data-tooltip="tooltip" title="Página Inicial"><img class="nav-img" src="public\img\calendar.png" alt=""><span class="nav-text">Calendário</span></a>
@@ -30,6 +30,9 @@
                         <a class="nav-link" href="<?=URL?>" data-tooltip="tooltip" title="Página Inicial"><img class="nav-img" src="public\img\setting.png" alt=""><span class="nav-text">Configurações</span></a>
                     </li>
                 </ul>
+            </div>
+            <div class="logout-container">
+                <a class="nav-link logout-link" href="<?=URL?>logout" data-tooltip="tooltip" title="Sair"><img class="nav-img" src="public\img\logout.png" alt=""><span class="nav-text logout-text">Sair</span></a>
             </div>
         </nav>
     </div>

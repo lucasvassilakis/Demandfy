@@ -30,7 +30,7 @@ body {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    padding-top: 25px;
+    padding-top: 15px;
 }
 
 .navbar-brand {
@@ -42,27 +42,33 @@ body {
     margin-top: 0;
 }
 
+.navbar-brand img {
+    width: 75%;
+    height: auto;
+}
+
 .search-container {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
     width: 100%;
-    padding: 0 20px;
+    padding: 0 15px;
     position: relative;
 }
 
 .search-input {
     width: 100%;
     padding: 8px 8px 8px 35px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    background-color: #D8D8D8;
+    border: none;
+    border-radius: 12px;
 }
 
 .search-icon {
     width: 20px;
     height: 20px;
     position: absolute;
-    left: 28px;
+    left: 24px;
     pointer-events: none;
 }
 
@@ -73,22 +79,91 @@ body {
 }
 
 .nav-item {
-    margin-bottom: 10px;
+    margin-bottom: 2px;
 }
 
 .nav-link {
     text-decoration: none;
     font-size: 18px;
     color: #000000;
-    display: block;
-}
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 8px 15px 0px 8px;
+    border-radius: 20px;
+    transition: background-color 0.3s ease;
+    height: 50px;
+    width: 100%;
+}       
 
 .nav-img {
-    width: 30px;
-    margin-right: 10px;
-    vertical-align: middle;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    margin-right: -15px;
+    border-radius: 50%;
+    background-color: #cccccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    position: relative;
+    z-index: 2;
+    transition: background-color 0.3s ease;
+}
+
+.nav-link:hover .nav-img {
+    background-color: #b8b8b8;
+}
+
+.nav-link.active .nav-img {
+    background-color: #C0E8C1;
 }
 
 .nav-text {
-    display: inline-block;
+    flex: 1;
+    padding: 3px 28px;
+    background-color: #D8D8D8;
+    border-radius: 12px;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.nav-link:hover .nav-text {
+    background-color: #b4b4b4;
+}
+
+.nav-link.active .nav-text {
+    background-color: #c0e8c1ad;
+}
+
+.logout-container {
+    margin-top: auto;
+    width: 100%;
+    padding: 0px 30px 35px 45px;
+    display: flex;
+    align-items: center;
+}
+
+.logout-link {
+    margin-left: -10px;
+}
+
+.logout-text {
+    color: #ff0000;
+}
+
+.logout-link:hover .logout-text {
+    background-color: #b8b8b8;
+}
+
+.logout-link .nav-img {
+    background-color: #b4b4b4;
+}
+
+.logout-link:hover .nav-img {
+    background-color: #b8b8b8;
 }
