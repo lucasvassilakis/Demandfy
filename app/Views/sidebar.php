@@ -1,10 +1,10 @@
 <header>
     <div class="container">
         <nav class="sidebar">
-            <a class="navbar-brand" href="<?=URL?>"><img src="" alt=""></a>
+            <a class="navbar-brand" href="<?=URL?>"><img src="public\img\Demandfy.png" alt=""></a>
             <div class="navbar">
                 <div class="search-container">
-                    <input type="text" placeholder="Buscar" class="search-input">
+                    <input type="text" placeholder="Pesquisa" class="search-input">
                     <img class="search-icon" src="public\img\search.png" alt="Buscar">
                 </div>
                 <ul class="nav-list">   

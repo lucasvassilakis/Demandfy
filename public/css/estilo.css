@@ -8,42 +8,52 @@
 }
 
 body {
-    font-family: 'Poppins';
-    background-color: #e6e6e6;
+    font-family: 'Itim';
+    background-color: #68D376;
     padding-left: 350px;
 }
 
 .container {
-
+    width: 100%;
 }
 
 .sidebar {
-  height: 100vh;
-  width: 310px;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  background-color: #ffffff;
-  overflow-x: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    height: 100vh;
+    width: 310px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #ffffff;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 25px;
 }
 
 .navbar-brand {
-
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 20px;
+    margin-top: 0;
 }
 
 .search-container {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    width: 100%;
+    padding: 0 20px;
+    position: relative;
 }
 
 .search-input {
     width: 100%;
-    padding: 8px;
+    padding: 8px 8px 8px 35px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
@@ -51,11 +61,15 @@ body {
 .search-icon {
     width: 20px;
     height: 20px;
-    margin-left: 8px;
+    position: absolute;
+    left: 28px;
+    pointer-events: none;
 }
 
 .nav-list {
     list-style-type: none;
+    width: 100%;
+    padding: 0 20px;
 }
 
 .nav-item {
@@ -76,5 +90,5 @@ body {
 }
 
 .nav-text {
-
+    display: inline-block;
 }
