@@ -8,12 +8,12 @@ class Paginas extends Controller{
         $this->view('paginas/inicio', $dados);
     }//fim da função index
 
-    public function sobre(){
-        $dados = ['titulo'=>"Página Sobre nós",
-                  'descricao'=>"Aqui você encontra as noticias mais confiaveis..."
+    public function sugestoes(){
+        $dados = ['titulo'=>"RDD -Sugestões",
+                  'descricao'=>"RDD - Sugestões"
         ];
-        $this->view('paginas/sobre', $dados);
-    }//fim da função sobre
+        $this->view('paginas/sugestoes', $dados);
+    }//fim da função sugestoes
     public function contato(){
         $dados = ['titulo'=>"Contato",
                   'descricao'=>"Página de Contatos"

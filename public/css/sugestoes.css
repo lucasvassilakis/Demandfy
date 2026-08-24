@@ -1,0 +1,144 @@
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  background:#5ec97c;
+  padding:30px;
+}
+
+.cards{
+  display:flex;
+  gap:24px;
+  flex-wrap:wrap;
+}
+
+.card{
+  background:#ffffff;
+  border-radius:12px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.12);
+  padding:22px 24px;
+  flex:1 1 380px;
+  min-width:320px;
+}
+
+.card-header{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin-bottom:18px;
+}
+
+.card-header .badge{
+  font-size:18px;
+  line-height:1;
+  margin-top:2px;
+}
+
+.card-header h2{
+  margin:0 0 4px 0;
+  font-size:16px;
+}
+
+.card-header p{
+  margin:0;
+  font-size:12.5px;
+  color:#777;
+}
+
+.card.demand .card-header h2{
+  color:#c0392b;
+}
+
+.card.demand{
+  background:#fdf3f2;
+}
+
+.card.suggestion .card-header h2{
+  color:#1f6d3a;
+}
+
+label{
+  display:block;
+  font-size:13px;
+  font-weight:600;
+  color:#333;
+  margin:14px 0 6px 0;
+}
+
+input[type="text"], select, textarea{
+  width:100%;
+  border:1px solid #d8dee0;
+  border-radius:8px;
+  padding:10px 12px;
+  font-size:13.5px;
+  font-family:inherit;
+  outline:none;
+  color:#333;
+  background:#fff;
+}
+
+input[type="text"]:focus, select:focus, textarea:focus{
+  border-color:#8fd0a3;
+  box-shadow:0 0 0 3px rgba(31,109,58,0.12);
+}
+
+textarea{
+  resize:vertical;
+  min-height:90px;
+}
+
+.textarea-wrap{
+  position:relative;
+}
+
+.char-count{
+  position:absolute;
+  bottom:8px;
+  right:12px;
+  font-size:11px;
+  color:#9aa5a9;
+}
+
+select{
+  appearance:none;
+  -webkit-appearance:none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23999'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat:no-repeat;
+  background-position:right 10px center;
+  background-size:18px;
+  padding-right:34px;
+}
+
+.submit-btn{
+  width:100%;
+  margin-top:20px;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  font-size:14px;
+  font-weight:700;
+  color:#fff;
+  cursor:pointer;
+  transition:filter .15s ease, transform .05s ease;
+}
+
+.submit-btn:active{
+  transform:translateY(1px);
+}
+
+.btn-demand{
+  background:#c0392b;
+}
+
+.btn-demand:hover{
+  filter:brightness(0.92);
+}
+
+.btn-suggestion{
+  background:#1f6d3a;
+}
+
+.btn-suggestion:hover{
+  filter:brightness(0.92);
+}
