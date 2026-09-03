@@ -42,6 +42,174 @@ body {
     min-height: 100vh;
 }
 
+.calendario-pagina {
+    position: relative;
+    min-height: 100vh;
+    padding-top: 1px;
+}
+
+.calendario-pagina .titulo {
+    position: absolute;
+    top: 100px;
+    left: 50px;
+    margin: 0;
+    transform: none;
+}
+
+.calendario {
+    width: min(1000px, calc(100% - 10px));
+    height: 635px;
+    margin: max(45px, calc((100vh - 625px) / 2 + 35px)) 0 0 0px;
+    padding: 1px 50px 60px;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 8px 8px 4px rgba(35, 89, 37, .55);
+}
+
+.calendario-cabecalho {
+    position: relative;
+    width: calc(100% + 60px);
+    margin-top: 14px;
+    margin-left: -30px;
+}
+
+.calendario-controles {
+    display: flex;
+    gap: 4px;
+}
+
+.calendario-navegacao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid #d8d8d8;
+    border-radius: 6px;
+    background: #fff;
+    color: #111;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.calendario-navegacao img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.calendario-proximo img {
+    transform: scaleX(-1);
+}
+
+.calendario-mes {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin: 0;
+    transform: translateX(-50%);
+    color: #222;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 32px;
+    white-space: nowrap;
+}
+
+.calendario-hoje {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 70px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid #d8d8d8;
+    border-radius: 6px;
+    background: #fff;
+    color: #222;
+    cursor: pointer;
+    font-family: 'Itim', sans-serif;
+    font-size: 16px;
+}
+
+.calendario-navegacao:hover {
+    background: #f1f1f1;
+}
+
+.calendario-hoje:hover {
+    background: #f1f1f1;
+}
+
+.calendario-grade {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-rows: repeat(7, 62px);
+    width: min(660px, 100%);
+    left: 50%;
+    margin: 70px 0 0;
+    transform: translateX(-50%);
+}
+
+.calendario-dia-semana,
+.calendario-data {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #d8d8d8;
+    color: #111;
+    font-family: 'Itim', sans-serif;
+    font-size: 18px;
+}
+
+.calendario-dia-semana {
+    align-items: center;
+    font-size: 19px;
+}
+
+.calendario-data {
+    align-items: flex-start;
+    padding-top: 14px;
+}
+
+.calendario-data.outro-mes {
+    color: #999;
+}
+
+.calendario-data.com-eventos {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.calendario-eventos {
+    display: flex;
+    gap: 3px;
+    margin-top: 8px;
+}
+
+.evento {
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.evento-verde {
+    background: #b8e6c0;
+}
+
+.evento-azul {
+    background: #b4d6f2;
+}
+
+.evento-amarelo {
+    background: #c4db36;
+}
+
 .paineis {
     display: grid;
     grid-template-columns: repeat(2, 400px);
@@ -54,6 +222,7 @@ body {
 .painel {
     width: 400px;
     height: 250px;
+    min-width: 0;
     padding: 11px 20px;
     background: #fff;
     border-radius: 8px;
@@ -64,12 +233,15 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
+    min-width: 0;
 }
 
 .painel h2 {
+    min-width: 0;
     color: #235925;
     font-size: 20px;
     font-weight: 500;
+    overflow-wrap: anywhere;
 }
 
 .icone {
@@ -85,11 +257,13 @@ body {
     font-family: Poppins, sans-serif;
     font-size: 16px;
     line-height: 17px;
+    overflow-wrap: anywhere;
 }
 
 .painel button {
     display: block;
-    width: 250px;
+    width: min(250px, 100%);
+    max-width: 100%;
     height: 30px;
     margin: 50px auto 0;
     border: 0;
@@ -144,6 +318,7 @@ body {
 
 .avisos li {
     margin-bottom: 9px;
+    overflow-wrap: anywhere;
 }
 
 .avisos li::before {
@@ -166,10 +341,16 @@ body {
 
 .demanda p {
     margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.demanda > div {
+    min-width: 0;
 }
 
 .status {
     width: 100px;
+    flex-shrink: 0;
     padding: 9px 20px;
     border-radius: 12px;
     font-family: Poppins, sans-serif;
@@ -198,55 +379,70 @@ body {
 
 .cards {
     display: grid;
-    grid-template-columns: repeat(2, minmax(280px, 430px));
-    gap: 32px;
-    margin: 210px auto 0;
-    max-width: 900px;
+    grid-template-columns: repeat(2, minmax(360px, 560px));
+    gap: 42px;
+    width: min(100%, 1160px);
+    margin: 210px 0 0 50px;
+    max-width: 1160px;
 }
 
 .card {
-    padding: 24px;
+    min-width: 0;
+    padding: 34px;
     background: #fff;
     border-radius: 8px;
     box-shadow: 8px 8px 4px rgba(35, 89, 37, .55);
 }
 
+.card.demand {
+    background: #fff8f8;
+}
+
+.card.suggestion {
+    background: #f8fff9;
+}
+
 .card-header {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
-    margin-bottom: 24px;
+    gap: 16px;
+    margin-bottom: 30px;
+    min-width: 0;
 }
 
-.badge {
-    width: 12px;
-    height: 12px;
+.card-icon {
+    width: 60px;
+    height: 60px;
     flex-shrink: 0;
-    margin-top: 8px;
-    border-radius: 50%;
-    background: #68d376;
+    margin-top: 2px;
+    object-fit: contain;
 }
 
 .card h2 {
     color: #235925;
-    font-size: 22px;
+    font-size: 28px;
     font-weight: 500;
 }
 
+.card.demand h2 {
+    color: #b83a3a;
+}
+
 .card-header p {
-    margin-top: 4px;
+    margin-top: 6px;
     color: #555;
     font-family: Poppins, sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 1.4;
+    overflow-wrap: anywhere;
 }
 
 .card label {
     display: block;
-    margin: 16px 0 6px;
-    color: #235925;
+    margin: 20px 0 8px;
+    color: #000000;
     font-family: Poppins, sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 600;
 }
 
@@ -259,20 +455,20 @@ body {
     background: #f7fbf7;
     color: #222;
     font-family: Poppins, sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     outline: none;
 }
 
 .card input,
 .card select {
-    height: 38px;
-    padding: 8px 10px;
+    height: 48px;
+    padding: 10px 12px;
 }
 
 .card textarea {
-    min-height: 105px;
-    padding: 10px;
-    resize: vertical;
+    min-height: 145px;
+    padding: 12px;
+    resize: none;
 }
 
 .card input:focus,
@@ -282,59 +478,311 @@ body {
     box-shadow: 0 0 0 2px #c0e8c1;
 }
 
+.card.demand input,
+.card.demand textarea,
+.card.demand select {
+    border-color: #e2bcbc;
+    background: #fff3f3;
+}
+
+.card.demand input:hover,
+.card.demand textarea:hover,
+.card.demand select:hover {
+    border-color: #c96b6b;
+}
+
+.card.demand input:focus,
+.card.demand textarea:focus,
+.card.demand select:focus {
+    border-color: #b83a3a;
+    box-shadow: 0 0 0 2px #f1caca;
+}
+
 .textarea-wrap {
     position: relative;
 }
 
 .char-count {
     position: absolute;
-    right: 10px;
-    bottom: 8px;
+    right: 12px;
+    bottom: 10px;
     color: #777;
     font-family: Poppins, sans-serif;
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .submit-btn {
     width: 100%;
-    height: 38px;
-    margin-top: 22px;
+    height: 48px;
+    margin-top: 28px;
     border: 0;
     border-radius: 8px;
     color: #fff;
     cursor: pointer;
     font-family: Itim, sans-serif;
-    font-size: 16px;
+    font-size: 20px;
     transition: background-color .2s ease, transform .2s ease;
 }
 
-.btn-demand,
-.btn-suggestion {
-    background: #235925;
+.btn-demand {
+    background: #C92127;
 }
 
-.submit-btn:hover {
-    background: #397c3d;
+.btn-suggestion {
+    background: #2f7d46;
+}
+
+.btn-demand:hover {
+    background: #9d3030;
     transform: translateY(-1px);
 }
 
-@media (max-width: 850px) {
+.btn-suggestion:hover {
+    background: #256638;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 1500px) and (min-width: 1201px) {
     .paineis {
-        grid-template-columns: 293px;
-        gap: 30px;
+        grid-template-columns: repeat(2, minmax(0, clamp(320px, 26vw, 400px)));
+        gap: clamp(30px, 5vw, 120px);
+        margin-left: clamp(30px, 6vw, 220px);
     }
 
-    body {
-        padding-left: 330px;
-    }
-
-    .sugestoes {
-        padding-right: 30px;
-        padding-left: 30px;
+    .painel {
+        width: 100%;
     }
 
     .cards {
-        grid-template-columns: minmax(280px, 430px);
-        justify-content: center;
+        grid-template-columns: repeat(2, minmax(280px, calc((100vw - 560px) / 2)));
+        gap: clamp(24px, 2.75vw, 42px);
+        width: calc(100% - 50px);
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 1200px) {
+    body {
+        padding-left: clamp(280px, 26vw, 400px);
+    }
+
+    .titulo {
+        transform: translate(clamp(24px, 3.25vw, 50px), clamp(70px, 6.5vw, 100px));
+    }
+
+    .calendario-pagina .titulo {
+        top: clamp(70px, 6.5vw, 100px);
+        left: clamp(24px, 3.25vw, 50px);
+    }
+
+    .paineis {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: min(calc(100% - 48px), 820px);
+        gap: clamp(30px, 5vw, 58px);
+        margin-top: clamp(150px, 13.7vw, 210px);
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .painel {
+        width: 100%;
+        height: auto;
+        min-height: clamp(210px, 16.3vw, 250px);
+        padding: clamp(10px, .7vw, 11px) clamp(15px, 1.3vw, 20px);
+    }
+
+    .painel h2 {
+        font-size: clamp(17px, 1.3vw, 20px);
+    }
+
+    .icone {
+        width: clamp(42px, 3.25vw, 50px);
+        height: clamp(42px, 3.25vw, 50px);
+    }
+
+    .resumos {
+        gap: clamp(8px, 2vw, 25px);
+    }
+
+    .resumos div {
+        width: clamp(64px, 7vw, 80px);
+        padding-right: 8px;
+        padding-left: 8px;
+    }
+
+    .sugestoes .titulo {
+        transform: translateY(clamp(70px, 6.5vw, 100px));
+    }
+
+    .cards {
+        grid-template-columns: repeat(2, minmax(280px, clamp(360px, 36.5vw, 560px)));
+        gap: clamp(24px, 2.75vw, 42px);
+        margin-top: clamp(150px, 13.7vw, 210px);
+        margin-left: clamp(0px, 3.25vw, 50px);
+    }
+
+    .card {
+        padding: clamp(22px, 2.2vw, 34px);
+    }
+
+    .card input,
+    .card textarea,
+    .card select {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 850px) {
+    body {
+        padding-left: 0;
+        padding-top: 82px;
+    }
+
+    .paineis {
+        grid-template-columns: minmax(0, 1fr);
+        width: min(calc(100% - 48px), 520px);
+        margin: 150px auto 0;
+        gap: 30px;
+    }
+
+    .painel {
+        height: auto;
+        min-height: 210px;
+    }
+
+    .painel h2 {
+        font-size: clamp(16px, 4.7vw, 20px);
+    }
+
+    .painel p,
+    .avisos {
+        font-size: clamp(13px, 3.6vw, 14px);
+    }
+
+    .sugestoes {
+        padding: 1px 24px 48px;
+    }
+
+    .calendario {
+        width: calc(100% - 32px);
+        height: 460px;
+        margin: max(10px, calc((100vh - 460px) / 2)) auto;
+        padding-right: 24px;
+        padding-left: 24px;
+    }
+
+    .calendario-controles {
+        margin-left: 0;
+    }
+
+    .calendario-cabecalho {
+        width: calc(100% + 28px);
+        margin-left: -14px;
+    }
+
+    .calendario-grade {
+        grid-template-rows: repeat(7, 56px);
+        margin-top: 40px;
+    }
+
+    .calendario-dia-semana,
+    .calendario-data {
+        font-size: 15px;
+    }
+
+    .calendario-data {
+        padding-top: 12px;
+    }
+
+    .cards {
+        grid-template-columns: minmax(0, 1fr);
+        width: min(100%, 560px);
+        margin: 150px auto 0;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding-top: 70px;
+    }
+
+    .titulo {
+        max-width: calc(100% - 48px);
+        transform: translate(24px, 48px);
+    }
+
+    .sugestoes .titulo {
+        transform: translateY(48px);
+    }
+
+    .calendario {
+        height: 400px;
+        margin: max(10px, calc((100vh - 400px) / 2)) auto;
+        padding-right: 16px;
+        padding-left: 16px;
+    }
+
+    .calendario-pagina .titulo {
+        top: 48px;
+        left: 24px;
+    }
+
+    .calendario-grade {
+        grid-template-rows: repeat(7, 48px);
+        margin-top: 30px;
+    }
+
+    .calendario-eventos {
+        margin-top: 5px;
+    }
+
+    .paineis {
+        width: calc(100% - 32px);
+        margin-top: 112px;
+    }
+
+    .painel button {
+        width: min(250px, 100%);
+    }
+
+    .resumos {
+        gap: 10px;
+    }
+
+    .resumos div {
+        width: clamp(70px, 22vw, 80px);
+        padding: 10px 6px;
+    }
+
+    .cards {
+        margin-top: 112px;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .card-header {
+        gap: 10px;
+        margin-bottom: 22px;
+    }
+
+    .card-icon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .card h2 {
+        font-size: 23px;
+    }
+
+    .card-header > div {
+        min-width: 0;
+    }
+
+    .status {
+        width: clamp(82px, 25vw, 100px);
+        padding-right: 8px;
+        padding-left: 8px;
     }
 }

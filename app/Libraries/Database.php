@@ -4,7 +4,7 @@ class Database{
     private $usuario = "root";
     private $senha = "";
     private $banco = "framework";
-    private $porta = "3307"; //verificar a porta do seu banco
+    private $porta = "3306"; //verificar a porta do seu banco
     private $dbh;
     private $stmt;
 

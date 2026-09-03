@@ -3,7 +3,7 @@
     <div class="cards">
     <form class="card demand" id="form-demanda">
         <div class="card-header">   
-        <span class="badge"></span>
+        <img class="card-icon" src="img/Box%20Important.png" alt="">
         <div>
             <h2>Nova Demanda</h2>
             <p>Informe um problema ou situação que precise de atenção.</p>
@@ -34,7 +34,7 @@
 
     <form class="card suggestion" id="form-sugestao">
         <div class="card-header">
-        <span class="badge">  </span>
+        <img class="card-icon" src="img/Light%20On.png" alt="">
         <div>
             <h2>Nova Sugestão</h2>
             <p>Compartilhe suas ideias para melhorar o nosso campus.</p>

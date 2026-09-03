@@ -14,12 +14,20 @@ class Paginas extends Controller{
         ];
         $this->view('paginas/sugestoes', $dados);
     }//fim da função sugestoes
+
+    public function calendario(){
+        $dados = ['titulo'=>"Calendário",
+                  'descricao'=>"Calendário de Eventos"
+        ];
+        $this->view('paginas/calendario', $dados);
+    }//fim da função calendario
+
     public function contato(){
         $dados = ['titulo'=>"Contato",
                   'descricao'=>"Página de Contatos"
         ];
         $this->view('paginas/contato', $dados);
-    }//fim da função sobre
+    }//fim da função contato
 
 }//fim da classe Paginas
 

@@ -1,5 +1,5 @@
-<h1><?php echo $dados['titulo'];?></h1>
-<p><?php echo $dados['descricao'];?><p>
+<h1><?php echo $dados['titulo'] ?? '';?></h1>
+<p><?php echo $dados['descricao'] ?? '';?></p>
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Email address</label>
   <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
