@@ -7,7 +7,7 @@ $calendarioAtivo = $urlAtual === 'calendario' || $urlAtual === 'paginas/calendar
 <header>
     <div class="container">
         <nav class="sidebar">
-            <a class="navbar-brand" href="<?=URL?>"><img src="img/Demandfy.png" alt=""></a>
+            <a class="navbar-brand" href="<?= URL ?>"><img src="img/Demandfy.png" alt=""></a>
             <div class="navbar">
                 <div class="search-container">
                     <input type="text" placeholder="Pesquisa" class="search-input">
@@ -15,30 +15,30 @@ $calendarioAtivo = $urlAtual === 'calendario' || $urlAtual === 'paginas/calendar
                 </div>
                 <ul class="nav-list">   
                     <li class="nav-item">
-                        <a class="nav-link<?= $inicioAtivo ? ' active' : '' ?>" href="<?=URL?>" data-tooltip="tooltip" title="Página Inicial"><img class="nav-img" src="img/home.png" alt=""><span class="nav-text">Início</span></a>
+                        <a class="nav-link<?= $inicioAtivo ? ' active' : '' ?>" href="<?= URL ?>" data-tooltip="tooltip" title="Página Inicial"><img class="nav-img" src="img/home.png" alt=""><span class="nav-text">Início</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link<?= $sugestoesAtiva ? ' active' : '' ?>" href="<?=URL?>/sugestoes" data-tooltip="tooltip" title="Sugestões"><img class="nav-img" src="img/idea.png" alt=""><span class="nav-text">RDD - Sugestões</span></a>
+                        <a class="nav-link<?= $sugestoesAtiva ? ' active' : '' ?>" href="<?= URL ?>/sugestoes" data-tooltip="tooltip" title="Sugestões"><img class="nav-img" src="img/idea.png" alt=""><span class="nav-text">RDD - Sugestões</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link<?= $calendarioAtivo ? ' active' : '' ?>" href="<?=URL?>/calendario" data-tooltip="tooltip" title="Calendário"><img class="nav-img" src="img/calendar.png" alt=""><span class="nav-text">Calendário</span></a>
+                        <a class="nav-link<?= $calendarioAtivo ? ' active' : '' ?>" href="<?= URL ?>/calendario" data-tooltip="tooltip" title="Calendário"><img class="nav-img" src="img/calendar.png" alt=""><span class="nav-text">Calendário</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?=URL?>" data-tooltip="tooltip" title="Avisos"><img class="nav-img" src="img/megaphone.png" alt=""><span class="nav-text">Avisos</span></a>
+                        <a class="nav-link" href="<?= URL ?>" data-tooltip="tooltip" title="Avisos"><img class="nav-img" src="img/megaphone.png" alt=""><span class="nav-text">Avisos</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?=URL?>" data-tooltip="tooltip" title="Notificações"><img class="nav-img" src="img/notification.png" alt=""><span class="nav-text">Notificações</span></a>
+                        <a class="nav-link" href="<?= URL ?>" data-tooltip="tooltip" title="Notificações"><img class="nav-img" src="img/notification.png" alt=""><span class="nav-text">Notificações</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?=URL?>" data-tooltip="tooltip" title="Perfil"><img class="nav-img" src="img/perfil-de-usuario.png" alt=""><span class="nav-text">Perfil</span></a>
+                        <a class="nav-link" href="<?= URL ?>" data-tooltip="tooltip" title="Perfil"><img class="nav-img" src="img/perfil-de-usuario.png" alt=""><span class="nav-text">Perfil</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?=URL?>" data-tooltip="tooltip" title="Configurações"><img class="nav-img" src="img/setting.png" alt=""><span class="nav-text">Configurações</span></a>
+                        <a class="nav-link" href="<?= URL ?>" data-tooltip="tooltip" title="Configurações"><img class="nav-img" src="img/setting.png" alt=""><span class="nav-text">Configurações</span></a>
                     </li>
                 </ul>
             </div>
             <div class="logout-container">
-                <a class="nav-link logout-link" href="<?=URL?>logout" data-tooltip="tooltip" title="Sair"><img class="nav-img" src="img/logout.png" alt=""><span class="nav-text logout-text">Sair</span></a>
+                <a class="nav-link logout-link" href="<?= URL ?>logout" data-tooltip="tooltip" title="Sair"><img class="nav-img" src="img/logout.png" alt=""><span class="nav-text logout-text">Sair</span></a>
             </div>
         </nav>
     </div>

@@ -56,10 +56,21 @@ body {
     transform: none;
 }
 
+.calendario-layout {
+    display: flex;
+    align-items: stretch;
+    gap: 20px;
+    width: calc(100% - 10px);
+    margin: max(45px, calc((100vh - 625px) / 2 + 35px)) 0 0;
+}
+
 .calendario {
-    width: min(1000px, calc(100% - 10px));
+    flex: 0 1 650px;
+    min-width: 932px;
+    width: min(650px, calc(100% - 320px));
     height: 635px;
-    margin: max(45px, calc((100vh - 625px) / 2 + 35px)) 0 0 0px;
+    margin-left: 30px;
+    margin-right: 70px;
     padding: 1px 50px 60px;
     background: #fff;
     border-radius: 6px;
@@ -208,6 +219,97 @@ body {
 
 .evento-amarelo {
     background: #c4db36;
+}
+
+.eventos-painel {
+    position: relative;
+    display: flex;
+    flex: 0 0 300px;
+    flex-direction: column;
+    min-width: 0;
+    height: 635px;
+    padding: 22px 18px;
+    border-radius: 6px;
+    background: #fff;
+    box-shadow: 8px 8px 4px rgba(35, 89, 37, .55);
+    color: #235925;
+}
+
+.eventos-painel h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.eventos-data {
+    margin: 5px 0 24px;
+    font-family: Poppins, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.evento-card {
+    margin-bottom: 16px;
+    padding: 12px 10px;
+    border-radius: 4px;
+    font-family: Poppins, sans-serif;
+}
+
+.evento-card-topo {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.evento-card strong,
+.evento-card span,
+.evento-card p {
+    overflow-wrap: anywhere;
+}
+
+.evento-card strong {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.evento-card span {
+    flex-shrink: 0;
+    font-size: 10px;
+}
+
+.evento-card p {
+    margin: 5px 0 0;
+    font-size: 10px;
+    line-height: 1.35;
+}
+
+.evento-card-verde {
+    background: #dcefe0;
+}
+
+.evento-card-azul {
+    background: #c9e0f7;
+}
+
+.evento-card-amarelo {
+    background: #f1f7c7;
+}
+
+.eventos-link {
+    position: absolute;
+    right: 18px;
+    bottom: 22px;
+    left: 18px;
+    color: #235925;
+    font-family: Poppins, sans-serif;
+    font-size: 12px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.eventos-link:hover {
+    text-decoration: underline;
 }
 
 .paineis {
@@ -663,12 +765,25 @@ body {
         padding: 1px 24px 48px;
     }
 
-    .calendario {
+    .calendario-layout {
         width: calc(100% - 32px);
+        margin: max(10px, calc((100vh - 460px) / 2)) auto 0;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .calendario {
+        width: 100%;
         height: 460px;
-        margin: max(10px, calc((100vh - 460px) / 2)) auto;
+        margin: 0;
         padding-right: 24px;
         padding-left: 24px;
+    }
+
+    .eventos-painel {
+        flex-basis: auto;
+        width: 100%;
+        height: 360px;
     }
 
     .calendario-controles {
