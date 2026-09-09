@@ -32,6 +32,66 @@ class Paginas extends Controller
         $this->view('paginas/calendario', $dados);
     }
 
+    public function avisos()
+    {
+        $dados = [
+            'titulo' => 'Avisos',
+            'descricao' => 'Avisos e Comunicados',
+        ];
+
+        $this->view('paginas/avisos', $dados);
+    }
+
+    public function notificacoes()
+    {
+        $dados = [
+            'titulo' => 'Notificações',
+            'descricao' => 'Notificações do Sistema',
+        ];
+
+        $this->view('paginas/notificacoes', $dados);
+    }
+
+    public function perfil()
+    {
+        $dados = [
+            'titulo' => 'Perfil',
+            'descricao' => 'Página de Perfil',
+        ];
+
+        $this->view('paginas/perfil', $dados);
+    }
+
+    public function configuracoes()
+    {
+        $dados = [
+            'titulo' => 'Configurações',
+            'descricao' => 'Página de Configurações',
+        ];
+
+        $this->view('paginas/configuracoes', $dados);
+    }
+
+    public function login()
+    {
+        $dados = [
+            'titulo' => 'Login',
+            'descricao' => 'Página de Login',
+        ];
+
+        $this->view('paginas/login', $dados);
+    }
+
+    public function cadastro()
+    {
+        $dados = [
+            'titulo' => 'Cadastro',
+            'descricao' => 'Página de Cadastro',
+        ];
+
+        $this->view('paginas/cadastro', $dados);
+    }
+
     public function contato()
     {
         $dados = [

@@ -1,0 +1,90 @@
+:root {
+    /* CORES PRIMÁRIAS */
+    --primary-green: #235925;
+    --light-green: #68D376;
+    --bg-green: #bfe8c3;
+    --bg-green-light: #dcefe0;
+    --border-green: #c7d8c9;
+    --hover-green: #f1f1f1;
+
+    /* CORES SECUNDÁRIAS */
+    --primary-red: #b83a3a;
+    --dark-red: #9d3030;
+    --bg-red-light: #d5efd7;
+    --bg-red-form: #f8fff8;
+    --bg-red-card: #fff8f8;
+    --border-red: #e2bcbc;
+
+    /* CORES NEUTRAS */
+    --text-dark: #252525;
+    --text-medium: #222;
+    --text-light: #444444;
+    --text-muted: #555;
+    --text-subtle: #777;
+    --text-pale: #999;
+    --text-disabled: #111;
+
+    /* CORES ADICIONAIS */
+    --border-light: #d8d8d8;
+    --border-muted: #d8caca;
+    --bg-white: #fff;
+    --bg-form: #f7fbf7;
+    --bg-pale: #f1f7c7;
+    --bg-blue-light: #c9e0f7;
+    --bg-blue-pale: #cce5fa;
+
+    /* CORES DE EVENTOS */
+    --event-green: #b8e6c0;
+    --event-blue: #b4d6f2;
+    --event-yellow: #c4db36;
+    --event-yellow-pale: #f1f3ad;
+
+    /* CORES DE STATUS */
+    --status-ok: #bfe8c3;
+    --status-warning: #d22;
+    --status-info: #426b8e;
+    --status-success: #4f893b;
+    --status-alert: #9b9644;
+
+    /* ESPAÇAMENTOS */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 20px;
+    --spacing-2xl: 24px;
+    --spacing-3xl: 32px;
+    --spacing-4xl: 50px;
+
+    /* DIMENSÕES */
+    --icon-sm: 25px;
+    --icon-md: 50px;
+    --icon-lg: 60px;
+    --icon-xl: 62px;
+
+    /* BORDER RADIUS */
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+    --radius-full: 50%;
+
+    /* SOMBRAS */
+    --shadow-card: 8px 8px 4px rgba(35, 89, 37, 0.55);
+    --shadow-light: 0 5px 8px rgba(0, 0, 0, 0.23);
+
+    /* TAMANHOS DE FONTE */
+    --font-size-xs: 10px;
+    --font-size-sm: 12px;
+    --font-size-base: 14px;
+    --font-size-md: 15px;
+    --font-size-lg: 18px;
+    --font-size-xl: 20px;
+    --font-size-2xl: 22px;
+    --font-size-3xl: 24px;
+    --font-size-4xl: 28px;
+
+    /* FAMILY FONTS */
+    --font-itim: 'Itim', sans-serif;
+    --font-poppins: 'Poppins', sans-serif;
+    --font-arial: Arial, sans-serif;
+}

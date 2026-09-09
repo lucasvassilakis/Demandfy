@@ -1,0 +1,23 @@
+.inicio {
+    min-height: 100vh;
+}
+
+.pagina {
+    width: 100%;
+    min-height: 100vh;
+    padding: 45px 5.5%;
+}
+
+.cabecalho {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 31px;
+}
+
+.linha-titulo {
+    width: 4px;
+    height: 38px;
+    background: #242424;
+    border-radius: 3px;
+}

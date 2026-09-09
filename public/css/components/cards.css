@@ -1,0 +1,178 @@
+/* ============================
+   CARDS.CSS - Cards e Painéis
+   ============================ */
+
+.paineis {
+    display: grid;
+    grid-template-columns: repeat(2, 400px);
+    justify-content: start;
+    gap: 58px 120px;
+    margin-top: 210px;
+    margin-left: 220px;
+}
+
+.painel {
+    width: 400px;
+    height: 250px;
+    min-width: 0;
+    padding: 11px 20px;
+    background: var(--bg-white);
+    border-radius: 8px;
+    box-shadow: var(--shadow-card);
+}
+
+.painel-cabecalho {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.painel h2 {
+    min-width: 0;
+    color: var(--primary-green);
+    font-size: 20px;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+.painel p {
+    margin: 29px 0 0;
+    color: var(--text-disabled);
+    font-family: var(--font-poppins);
+    font-size: 16px;
+    line-height: 17px;
+    overflow-wrap: anywhere;
+}
+
+.resumos {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-top: 28px;
+}
+
+.resumos div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80px;
+    padding: 12px;
+    border-radius: 6px;
+    background: var(--bg-green);
+}
+
+.resumos strong {
+    font-size: 22px;
+}
+
+.resumos small,
+.demanda small {
+    font-family: var(--font-poppins);
+    font-size: 10px;
+}
+
+.link-painel {
+    display: block;
+    margin-top: 30px;
+    color: var(--primary-green);
+    text-align: center;
+    text-decoration: none;
+}
+
+.demanda {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0 8px;
+    border-bottom: 2px solid var(--border-muted);
+}
+
+.demanda p {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.demanda > div {
+    min-width: 0;
+}
+
+.status {
+    width: 100px;
+    flex-shrink: 0;
+    padding: 9px 20px;
+    border-radius: 12px;
+    font-family: var(--font-poppins);
+    font-size: 10px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.resolvido,
+.aguardando {
+    background: var(--status-ok);
+}
+
+.aguardando {
+    color: var(--status-warning);
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(360px, 560px));
+    gap: 42px;
+    width: min(100%, 1160px);
+    margin: 210px 0 0 50px;
+    max-width: 1160px;
+}
+
+.card {
+    min-width: 0;
+    padding: 34px;
+    background: var(--bg-white);
+    border-radius: 8px;
+    box-shadow: var(--shadow-card);
+}
+
+.card.demand {
+    background: var(--bg-red-card);
+}
+
+.card.suggestion {
+    background: var(--bg-red-form);
+}
+
+.card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 30px;
+    min-width: 0;
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    object-fit: contain;
+}
+
+.card h2 {
+    color: var(--primary-green);
+    font-size: 28px;
+    font-weight: 500;
+}
+
+.card.demand h2 {
+    color: var(--primary-red);
+}
+
+.card-header p {
+    margin-top: 6px;
+    color: var(--text-muted);
+    font-family: var(--font-poppins);
+    font-size: 14px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}

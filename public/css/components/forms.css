@@ -1,0 +1,77 @@
+/* ============================
+   FORMS.CSS - Formulários
+   ============================ */
+
+.card label {
+    display: block;
+    margin: 20px 0 8px;
+    color: #000000;
+    font-family: var(--font-poppins);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.card input,
+.card textarea,
+.card select {
+    width: 100%;
+    border: 1px solid var(--border-green);
+    border-radius: 6px;
+    background: var(--bg-form);
+    color: var(--text-medium);
+    font-family: var(--font-poppins);
+    font-size: 14px;
+    outline: none;
+}
+
+.card input,
+.card select {
+    height: 48px;
+    padding: 10px 12px;
+}
+
+.card textarea {
+    min-height: 145px;
+    padding: 12px;
+    resize: none;
+}
+
+.card input:focus,
+.card textarea:focus,
+.card select:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 2px #c0e8c1;
+}
+
+.card.demand input,
+.card.demand textarea,
+.card.demand select {
+    border-color: var(--border-red);
+    background: #fff3f3;
+}
+
+.card.demand input:hover,
+.card.demand textarea:hover,
+.card.demand select:hover {
+    border-color: #c96b6b;
+}
+
+.card.demand input:focus,
+.card.demand textarea:focus,
+.card.demand select:focus {
+    border-color: var(--primary-red);
+    box-shadow: 0 0 0 2px #f1caca;
+}
+
+.textarea-wrap {
+    position: relative;
+}
+
+.char-count {
+    position: absolute;
+    right: 12px;
+    bottom: 10px;
+    color: var(--text-subtle);
+    font-family: var(--font-poppins);
+    font-size: 12px;
+}

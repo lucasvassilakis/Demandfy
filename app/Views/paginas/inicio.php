@@ -33,7 +33,7 @@
                 <h2>Avisos do Grêmio</h2>
             </div>
 
-            <ul class="avisos">
+            <ul class="avisos-lista">
                 <li>Reunião do Grêmio - 01/07 às 18hrs na sala 21.</li>
                 <li>Participe do evento consciência negra - 20/11 às 09hrs no auditório.</li>
                 <li>Novos horários de atendimento.</li>

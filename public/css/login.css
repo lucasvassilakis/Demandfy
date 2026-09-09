@@ -1,0 +1,322 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    min-height: 100vh;
+    background-color: #68D376;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Container principal */
+.login-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 250px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Painel de login */
+.login-panel {
+    background-color: #97F99D;
+    border-radius: 50px;
+    padding: 100px 150px 100px 70px;
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Título */
+.login-title {
+    font-size: 32px;
+    font-weight: 600;
+    color: #1a1a1a;
+    text-align: center;
+    margin: 0 auto 10px auto;
+    width: 100%;
+}
+
+/* Formulário */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* Grupo de formulário */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Label */
+.form-label {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2a2a2a;
+}
+
+/* Input */
+.form-input {
+    font-size: 16px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 10px;
+    background-color: #ffffff;
+    color: #1a1a1a;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    width: 85%;
+    max-width: 520px;
+    margin-right: auto;
+}
+
+.form-input:focus {
+    outline: none;
+    background-color: #f5f5f5;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Botão Entrar */
+.btn-submit {
+    font-size: 20px;
+    font-weight: 700;
+    padding: 14px 35px;
+    background-color: #C92127;
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 30px;
+    width: 100%;
+    margin-right: auto;
+}
+
+.btn-submit:hover {
+    background-color: #a93226;
+    transform: translateY(-2px);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+/* Footer com links */
+.login-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-top: 15px;
+}
+
+.footer-section {
+    font-size: 17px;
+    color: #2a2a2a;
+    text-align: left;
+}
+
+
+.link-blue {
+    color: #1e40af;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.link-blue:hover {
+    color: #1e3a8a;
+    text-decoration: underline;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .login-container {
+        justify-content: center;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .login-panel {
+        max-width: 100%;
+        padding: 50px 40px;
+    }
+
+    .login-title {
+        font-size: 32px;
+    }
+
+    .form-label {
+        font-size: 15px;
+    }
+
+    .form-input {
+        font-size: 16px;
+        padding: 14px 18px;
+    }
+
+    .btn-submit {
+        font-size: 16px;
+        padding: 14px 25px;
+    }
+}
+
+/* Decoração - Imagem na direita */
+.login-decoration {
+    position: fixed;
+    right: -250px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 120vh;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.decoration-img {
+    width: auto;
+    height: 120%;
+    object-fit: cover;
+}
+
+/* Logo Demandfy */
+.login-logo {
+    position: fixed;
+    right: 180px;
+    top: 40%;
+    transform: translateY(-50%);
+    z-index: 3;
+    pointer-events: none;
+}
+
+.logo-img {
+    width: 550px;
+    height: 550px;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.15));
+}
+
+/* Textos abaixo da logo */
+.logo-texts {
+    margin-top: 1px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    pointer-events: none;
+    max-width: 520px;
+}
+
+.logo-line1 {
+    color: #235925;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-top: 1px;
+}
+
+.logo-line2 {
+    color: #336033;
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 8px;
+    line-height: 1.3;
+}
+
+/* Ajustes responsivos para a logo e textos */
+@media (max-width: 768px) {
+    .logo-img {
+        width: 220px;
+        height: 220px;
+        filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.12));
+    }
+
+    .logo-texts {
+        max-width: 260px;
+    }
+
+    .logo-line1 {
+        font-size: 18px;
+    }
+
+    .logo-line2 {
+        font-size: 13px;
+    }
+}
+
+/* Linha com dois campos (ex: senha + confirmar senha) */
+.form-row {
+    display: flex;
+    gap: 12px;
+    width: 85%;
+    max-width: 520px;
+    margin-right: auto;
+}
+.form-row .form-group {
+    flex: 1 1 50%;
+}
+.form-row .form-group .form-input {
+    width: 100%;
+    max-width: none;
+}
+
+@media (max-width: 1200px), (max-height: 700px) {
+    .login-decoration,
+    .login-logo {
+        display: none;
+    }
+
+    .login-container {
+        padding-left: 0;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .login-panel {
+        padding: 30px 20px;
+        border-radius: 20px;
+        max-width: 420px;
+        width: 100%;
+    }
+
+    .btn-submit {
+        padding: 12px 20px;
+        width: 100%;
+    }
+}
+
+/* manter botões e campos menor à direita em telas maiores */
+.btn-submit {
+    width: 85%;
+    max-width: 520px;
+}
+
+@media (max-width: 768px) {
+    .form-input {
+        width: 85%;
+    }
+    .btn-submit {
+        width: 85%;
+    }
+}

@@ -1,0 +1,273 @@
+/* ============================
+   CALENDAR.CSS - Calendário
+   ============================ */
+
+.calendario-pagina {
+    position: relative;
+    min-height: 100vh;
+    padding-top: 1px;
+}
+
+.calendario-pagina .titulo {
+    position: absolute;
+    top: 100px;
+    left: 50px;
+    margin: 0;
+    transform: none;
+}
+
+.calendario-layout {
+    display: flex;
+    align-items: stretch;
+    gap: 20px;
+    width: calc(100% - 10px);
+    margin: max(45px, calc((100vh - 625px) / 2 + 35px)) 0 0;
+}
+
+.calendario {
+    flex: 0 1 650px;
+    min-width: 932px;
+    width: min(650px, calc(100% - 320px));
+    height: 635px;
+    margin-left: 30px;
+    margin-right: 70px;
+    padding: 1px 50px 60px;
+    background: var(--bg-white);
+    border-radius: 6px;
+    box-shadow: var(--shadow-card);
+}
+
+.calendario-cabecalho {
+    position: relative;
+    width: calc(100% + 60px);
+    margin-top: 14px;
+    margin-left: -30px;
+}
+
+.calendario-controles {
+    display: flex;
+    gap: 4px;
+}
+
+.calendario-navegacao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    background: var(--bg-white);
+    color: var(--text-disabled);
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.calendario-navegacao:hover {
+    background: var(--hover-green);
+}
+
+.calendario-navegacao img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.calendario-proximo img {
+    transform: scaleX(-1);
+}
+
+.calendario-mes {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin: 0;
+    transform: translateX(-50%);
+    color: #222;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 32px;
+    white-space: nowrap;
+}
+
+.calendario-hoje {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 70px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    background: var(--bg-white);
+    color: #222;
+    cursor: pointer;
+    font-family: var(--font-itim);
+    font-size: 16px;
+}
+
+.calendario-hoje:hover {
+    background: var(--hover-green);
+}
+
+.calendario-grade {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-rows: repeat(7, 62px);
+    width: min(660px, 100%);
+    left: 50%;
+    margin: 70px 0 0;
+    transform: translateX(-50%);
+}
+
+.calendario-dia-semana,
+.calendario-data {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-light);
+    color: var(--text-disabled);
+    font-family: var(--font-itim);
+    font-size: 18px;
+}
+
+.calendario-dia-semana {
+    align-items: center;
+    font-size: 19px;
+}
+
+.calendario-data {
+    align-items: flex-start;
+    padding-top: 14px;
+}
+
+.calendario-data.outro-mes {
+    color: var(--text-pale);
+}
+
+.calendario-data.com-eventos {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.calendario-eventos {
+    display: flex;
+    gap: 3px;
+    margin-top: 8px;
+}
+
+.evento {
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.evento-verde {
+    background: var(--event-green);
+}
+
+.evento-azul {
+    background: var(--event-blue);
+}
+
+.evento-amarelo {
+    background: var(--event-yellow);
+}
+
+.eventos-painel {
+    position: relative;
+    display: flex;
+    flex: 0 0 300px;
+    flex-direction: column;
+    min-width: 0;
+    height: 635px;
+    padding: 22px 18px;
+    border-radius: 6px;
+    background: var(--bg-white);
+    box-shadow: var(--shadow-card);
+    color: var(--primary-green);
+}
+
+.eventos-painel h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.eventos-data {
+    margin: 5px 0 24px;
+    font-family: var(--font-poppins);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.evento-card {
+    margin-bottom: 16px;
+    padding: 12px 10px;
+    border-radius: 4px;
+    font-family: var(--font-poppins);
+}
+
+.evento-card-topo {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.evento-card strong,
+.evento-card span,
+.evento-card p {
+    overflow-wrap: anywhere;
+}
+
+.evento-card strong {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.evento-card span {
+    flex-shrink: 0;
+    font-size: 10px;
+}
+
+.evento-card p {
+    margin: 5px 0 0;
+    font-size: 10px;
+    line-height: 1.35;
+}
+
+.evento-card-verde {
+    background: var(--bg-green-light);
+}
+
+.evento-card-azul {
+    background: var(--bg-blue-light);
+}
+
+.evento-card-amarelo {
+    background: var(--bg-pale);
+}
+
+.eventos-link {
+    position: absolute;
+    right: 18px;
+    bottom: 22px;
+    left: 18px;
+    color: var(--primary-green);
+    font-family: var(--font-poppins);
+    font-size: 12px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.eventos-link:hover {
+    text-decoration: underline;
+}
