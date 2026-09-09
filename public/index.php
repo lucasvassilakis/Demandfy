@@ -5,7 +5,7 @@ $db = new Database;
 
 // Verificar se é uma página sem sidebar
 $urlAtual = trim((string) filter_input(INPUT_GET, 'url', FILTER_SANITIZE_URL), '/');
-$paginasSemSidebar = ['login', 'cadastro', 'contato'];
+$paginasSemSidebar = ['login', 'cadastro'];
 $paginaSemSidebar = in_array($urlAtual, $paginasSemSidebar);
 
 // Se for página sem sidebar, renderizar completo
