@@ -1,0 +1,257 @@
+/* ============================================================
+   BACKEND.CSS - estilos dos recursos novos do back-end
+   Alertas (mensagens), erros de campo, links no lugar de botões,
+   listas de demandas/sugestões e páginas simples.
+   ============================================================ */
+
+/* ---------- Mensagens (Sessao::mensagem) ---------- */
+.alerta {
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-family: var(--font-poppins, Arial, sans-serif);
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.alerta-sucesso {
+    background: #d5efd7;
+    border: 1px solid #4f893b;
+    color: #1f4d1f;
+}
+
+.alerta-erro {
+    background: #fde4e4;
+    border: 1px solid #b83a3a;
+    color: #7a1f1f;
+}
+
+/* Mensagem direto no <body> (layout com sidebar): flutua no topo e some sozinha. */
+body > .alerta {
+    position: fixed;
+    top: 16px;
+    right: 24px;
+    z-index: 50;
+    max-width: 420px;
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.2);
+    animation: alerta-some 0.4s ease 6s forwards;
+}
+
+@keyframes alerta-some {
+    to { opacity: 0; visibility: hidden; }
+}
+
+/* ---------- Erro embaixo de um campo ---------- */
+.erro-campo {
+    display: block;
+    margin-top: 6px;
+    color: var(--primary-red, #b83a3a);
+    font-family: var(--font-poppins, Arial, sans-serif);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* ---------- Painel inicial: link com o visual do antigo <button> ---------- */
+.painel-botao {
+    display: block;
+    width: min(250px, 100%);
+    max-width: 100%;
+    height: 30px;
+    margin: 50px auto 0;
+    border-radius: 12px;
+    background: var(--bg-green);
+    color: #000;
+    font-family: var(--font-itim);
+    font-size: 15px;
+    line-height: 30px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.painel-botao:hover { background: var(--light-green); }
+
+/* Demanda recente clicável */
+a.demanda-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+a.demanda-link:hover { background: var(--hover-green); }
+
+/* Selo de status "Em análise" (os outros já existem em cards.css) */
+.analise {
+    background: var(--bg-blue-pale);
+    color: var(--status-info);
+}
+
+/* ---------- Abas e setas que agora são links ---------- */
+a.aba,
+a.tab {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.navegacao-link {
+    width: 25px;
+    height: 25px;
+    border: 1px solid #9db69a;
+    border-radius: 6px;
+    background: #d8ecd3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navegacao-link img { width: 14px; height: 14px; }
+a.navegacao-link:hover { background: #c7e2c1; }
+.navegacao-link.desativado { opacity: 0.45; }
+
+/* ---------- Calendário: links no lugar de botões/divs ---------- */
+a.calendario-navegacao,
+a.calendario-hoje {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+a.celula-link {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a.celula-link:hover { background: var(--hover-green); }
+.calendario-data.hoje { background: var(--bg-green-light); }
+.calendario-data.selecionado { outline: 2px solid var(--primary-green); outline-offset: -2px; }
+
+/* ---------- Notificação não lida ---------- */
+.notificacao-item.nao-lida { background: #f1f9f2; }
+
+/* ---------- Páginas novas (demandas, configurações, 404) ---------- */
+.conteudo-pagina {
+    margin: 200px 30px 40px 50px;
+    max-width: 980px;
+}
+
+.caixa-lista,
+.caixa-simples {
+    padding: 24px 28px;
+    background: var(--bg-white, #fff);
+    border-radius: 8px;
+    box-shadow: var(--shadow-card);
+    font-family: var(--font-poppins, Arial, sans-serif);
+}
+
+.caixa-lista-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.botao-verde {
+    display: inline-block;
+    padding: 9px 20px;
+    border-radius: 8px;
+    background: #2f7d46;
+    color: #fff;
+    font-family: var(--font-itim);
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.botao-verde:hover { background: #256638; }
+
+.link-voltar {
+    color: var(--primary-green);
+    text-decoration: none;
+}
+
+.linha-demanda {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 2px solid var(--border-muted);
+}
+
+.linha-demanda-info {
+    flex: 1;
+    min-width: 0;
+    color: inherit;
+    text-decoration: none;
+}
+
+.linha-demanda-info strong {
+    display: block;
+    font-size: 15px;
+    overflow-wrap: anywhere;
+}
+
+.linha-demanda-info small,
+.detalhe-meta {
+    color: var(--text-subtle);
+    font-size: 12px;
+}
+
+.botao-excluir {
+    padding: 8px 14px;
+    border: 0;
+    border-radius: 8px;
+    background: #C92127;
+    color: #fff;
+    cursor: pointer;
+    font-family: var(--font-itim);
+    font-size: 14px;
+}
+
+.botao-excluir:hover { background: var(--dark-red); }
+
+.detalhe-titulo { margin-top: 6px; font-size: 24px; }
+.detalhe-meta { margin: 6px 0 18px; }
+.detalhe-texto { margin-bottom: 24px; font-size: 15px; line-height: 1.6; }
+
+.vazio {
+    padding: 14px 0;
+    color: var(--text-subtle);
+    font-family: var(--font-poppins, Arial, sans-serif);
+    font-size: 14px;
+}
+
+.form-estreito { max-width: 520px; }
+
+/* Lista "Minhas últimas sugestões" (página RDD) */
+.lista-simples {
+    margin: 40px 30px 40px 50px;
+    max-width: 1160px;
+    font-family: var(--font-poppins, Arial, sans-serif);
+}
+
+.lista-simples h2 { margin-bottom: 10px; }
+
+.item-simples {
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    background: var(--bg-white);
+    border-radius: 8px;
+}
+
+.item-simples strong { display: block; font-size: 14px; }
+.item-simples small { color: var(--text-subtle); font-size: 12px; }
+
+/* 404 para visitantes (sem sidebar) */
+body.pagina-erro {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    background: var(--light-green, #68D376);
+}
+
+body.pagina-erro .caixa-simples { text-align: center; }
+body.pagina-erro h1 { font-size: 56px; margin-bottom: 8px; }
+.caixa-simples p { margin-bottom: 18px; }

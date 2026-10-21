@@ -16,6 +16,7 @@
 @import url('./components/forms.css');
 @import url('./components/buttons.css');
 @import url('./components/notifications.css');
+@import url('./components/backend.css');
 
 /* 6. MEDIA QUERIES */
 @import url('./responsive.css');

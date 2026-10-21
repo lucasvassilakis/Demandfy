@@ -1,34 +1,37 @@
 <?php
-include '../app/configuracao.php';
-include '../app/Autoload.php';
-$db = new Database;
+/*
+ * FRONT CONTROLLER (ponto de entrada único do sistema)
+ * ------------------------------------------------------------------
+ * Toda requisição passa por aqui (o .htaccess redireciona tudo para este arquivo).
+ *
+ * MUDANÇAS em relação à versão anterior:
+ *  - session_start(): necessário para login, mensagens e proteção CSRF.
+ *  - Removida a conexão "new Database" que ficava aqui: cada Model abre a sua.
+ *  - Removido o HTML daqui: agora o layout (<html>, <head>, sidebar) é montado
+ *    pelo Controller (Views/layout/topo.php e rodape.php). Assim as páginas de
+ *    login/cadastro (sem sidebar) e as demais (com sidebar) são decididas pelo
+ *    controller, e redirecionamentos funcionam sem erro "headers already sent".
+ */
 
-// Verificar se é uma página sem sidebar
-$urlAtual = trim((string) filter_input(INPUT_GET, 'url', FILTER_SANITIZE_URL), '/');
-$paginasSemSidebar = ['login', 'cadastro'];
-$paginaSemSidebar = in_array($urlAtual, $paginasSemSidebar);
+// Cookie de sessão mais seguro: não acessível por JavaScript e protegido contra CSRF entre sites.
+session_set_cookie_params([
+    'httponly' => true,
+    'samesite' => 'Lax',
+]);
+session_start();
 
-// Se for página sem sidebar, renderizar completo
-if ($paginaSemSidebar) {
-    $rotas = new Rota();
-    return;
-}
+require_once '../app/configuracao.php';
+require_once '../app/Autoload.php';
+
+// A classe Rota lê a URL, escolhe o controller/método e executa.
+new Rota();
 ?>
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= APP_NAME ?> </title>
-    
-    <link rel="stylesheet" href="css/estilo.css">
-    <link rel="stylesheet" href="css/sidebar.css">
-</head>
-<body>
-    <?php
-    include '../app/views/sidebar.php';
-    $rotas = new Rota();
-   // $rotas->url();
-    ?>
-</body>
-</html>
+<div vw class="enabled">
+  <div vw-access-button class="active"></div>
+  <div vw-plugin-wrapper>
+    <div class="vw-plugin-top-wrapper"></div>
+  </div>
+</div>
+<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+<script>
+  new window.VLibras.Widget('https://vlibras.gov.br/app');
