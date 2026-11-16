@@ -20,6 +20,8 @@
  */
 class Usuarios extends Controller
 {
+    const USUARIOS_POR_PAGINA = 5;
+
     private $usuarioModel;
     private $notificacaoModel;
 
@@ -27,6 +29,178 @@ class Usuarios extends Controller
     {
         $this->usuarioModel = $this->model('Usuario');
         $this->notificacaoModel = $this->model('Notificacao');
+    }
+
+    public function index()
+    {
+        $this->exigirLogin();
+        $ehAdministrador = Sessao::ehAdministrador();
+        if (!$ehAdministrador && !Sessao::ehModerador()) {
+            Sessao::mensagem('geral', 'Você não tem permissão para visualizar os usuários.', 'erro');
+            Url::redirecionar('');
+        }
+
+        $busca = isset($_GET['busca']) && is_string($_GET['busca'])
+            ? trim(mb_substr($_GET['busca'], 0, 100))
+            : '';
+        $perfil = isset($_GET['perfil']) && is_string($_GET['perfil'])
+            && in_array($_GET['perfil'], ['admin', 'padrao'], true)
+            ? $_GET['perfil']
+            : '';
+        $permissaoModel = $this->model('Permissao');
+        $total = $permissaoModel->contarUsuariosGerenciaveis($busca, $perfil);
+        $totalPaginas = max(1, (int) ceil($total / self::USUARIOS_POR_PAGINA));
+        $pagina = isset($_GET['pagina']) && is_scalar($_GET['pagina'])
+            ? filter_var($_GET['pagina'], FILTER_VALIDATE_INT)
+            : false;
+        $pagina = $pagina === false ? 1 : min(max(1, (int) $pagina), $totalPaginas);
+        $usuarioAtual = Sessao::usuarioId();
+        $usuarios = $permissaoModel->listarUsuariosGerenciaveis(
+            self::USUARIOS_POR_PAGINA,
+            ($pagina - 1) * self::USUARIOS_POR_PAGINA,
+            $busca,
+            $perfil,
+            $ehAdministrador ? $usuarioAtual : 0
+        );
+        foreach ($usuarios as $usuario) {
+            $partesNome = preg_split('/\s+/u', trim($usuario->nome), -1, PREG_SPLIT_NO_EMPTY);
+            $usuario->iniciais = $partesNome
+                ? mb_strtoupper(mb_substr($partesNome[0], 0, 1)
+                    . (count($partesNome) > 1 ? mb_substr($partesNome[count($partesNome) - 1], 0, 1) : ''))
+                : '?';
+        }
+
+        $parametros = [];
+        if ($busca !== '') {
+            $parametros['busca'] = $busca;
+        }
+        if ($perfil !== '') {
+            $parametros['perfil'] = $perfil;
+        }
+        $queryFiltros = http_build_query($parametros);
+
+        $this->view('usuarios/index', [
+            'titulo' => 'Usuários',
+            'usuarios' => $usuarios,
+            'total' => $total,
+            'pagina' => $pagina,
+            'totalPaginas' => $totalPaginas,
+            'deslocamento' => ($pagina - 1) * self::USUARIOS_POR_PAGINA,
+            'busca' => $busca,
+            'perfil' => $perfil,
+            'queryFiltros' => $queryFiltros,
+            'podeGerenciarNiveis' => $ehAdministrador,
+            'usuarioAtual' => $usuarioAtual,
+        ]);
+    }
+
+    public function alterarNivel()
+    {
+        $this->exigirLogin();
+        $this->exigirPost('usuarios');
+        $this->validarCsrf('usuarios');
+
+        if (!Sessao::ehAdministrador()) {
+            Sessao::mensagem('geral', 'Somente administradores podem alterar o perfil de usuário.', 'erro');
+            Url::redirecionar('usuarios');
+        }
+
+        $usuarioId = isset($_POST['usuario_id']) && is_scalar($_POST['usuario_id'])
+            ? filter_var($_POST['usuario_id'], FILTER_VALIDATE_INT)
+            : false;
+        $nivel = isset($_POST['nivel']) && is_string($_POST['nivel']) ? $_POST['nivel'] : '';
+        if ($usuarioId === false || $usuarioId <= 0 || !in_array($nivel, ['admin', 'padrao'], true)) {
+            Sessao::mensagem('geral', 'Os dados do perfil selecionado são inválidos.', 'erro');
+            Url::redirecionar('usuarios');
+        }
+
+        $atorId = Sessao::usuarioId();
+        $permissaoModel = $this->model('Permissao');
+        if (!$permissaoModel->alterarNivelAdministrador($atorId, $usuarioId, $nivel)) {
+            Sessao::mensagem('geral', 'Não foi possível alterar o perfil deste usuário.', 'erro');
+            Url::redirecionar('usuarios?' . $this->queryRetornoUsuarios());
+        }
+
+        if ($usuarioId === $atorId && $nivel === 'padrao') {
+            Sessao::definirAdministrador(false);
+            Sessao::mensagem('geral', 'Seu perfil foi alterado para usuário padrão.');
+            Url::redirecionar('');
+        }
+
+        Sessao::mensagem('geral', 'Perfil do usuário atualizado com sucesso.');
+        Url::redirecionar('usuarios?' . $this->queryRetornoUsuarios());
+    }
+
+    public function excluir()
+    {
+        $this->exigirLogin();
+        $this->exigirPost('usuarios');
+        $this->validarCsrf('usuarios');
+
+        if (!Sessao::ehAdministrador()) {
+            Sessao::mensagem('geral', 'Somente administradores podem excluir usuários.', 'erro');
+            Url::redirecionar('usuarios');
+        }
+
+        $usuarioId = isset($_POST['usuario_id']) && is_scalar($_POST['usuario_id'])
+            ? filter_var($_POST['usuario_id'], FILTER_VALIDATE_INT)
+            : false;
+        if ($usuarioId === false || $usuarioId <= 0) {
+            Sessao::mensagem('geral', 'O usuário selecionado é inválido.', 'erro');
+            Url::redirecionar('usuarios');
+        }
+
+        $resultado = $this->model('Permissao')->excluirUsuarioAdministrador(
+            Sessao::usuarioId(),
+            (int) $usuarioId
+        );
+        if ($resultado['status'] === 'excluido') {
+            $fotoPerfil = (string) ($resultado['foto_perfil'] ?? '');
+            if (preg_match('~^uploads/perfis/[a-f0-9]{32}\.(?:jpg|png|webp)$~D', $fotoPerfil)) {
+                $caminhoFoto = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'public'
+                    . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $fotoPerfil);
+                if (is_file($caminhoFoto) && !unlink($caminhoFoto)) {
+                    error_log('Demandfy - não foi possível remover a foto de perfil do usuário excluído.');
+                }
+            }
+            Sessao::mensagem('geral', 'Usuário excluído com sucesso.');
+        } elseif ($resultado['status'] === 'proprio') {
+            Sessao::mensagem('geral', 'Você não pode excluir a própria conta por esta tela.', 'erro');
+        } elseif ($resultado['status'] === 'com_registros') {
+            Sessao::mensagem(
+                'geral',
+                'Este usuário possui demandas, sugestões, avisos, instituições, respostas ou histórico vinculados e não pode ser excluído.',
+                'erro'
+            );
+        } elseif ($resultado['status'] === 'inexistente') {
+            Sessao::mensagem('geral', 'O usuário selecionado não foi encontrado.', 'erro');
+        } else {
+            Sessao::mensagem('geral', 'Não foi possível excluir este usuário.', 'erro');
+        }
+
+        Url::redirecionar('usuarios?' . $this->queryRetornoUsuarios());
+    }
+
+    private function queryRetornoUsuarios()
+    {
+        $parametros = [];
+        if (isset($_POST['busca']) && is_string($_POST['busca'])) {
+            $busca = trim(mb_substr($_POST['busca'], 0, 100));
+            if ($busca !== '') {
+                $parametros['busca'] = $busca;
+            }
+        }
+        if (isset($_POST['perfil']) && is_string($_POST['perfil'])
+            && in_array($_POST['perfil'], ['admin', 'padrao'], true)) {
+            $parametros['perfil'] = $_POST['perfil'];
+        }
+        if (isset($_POST['pagina']) && is_scalar($_POST['pagina'])) {
+            $pagina = filter_var($_POST['pagina'], FILTER_VALIDATE_INT);
+            if ($pagina !== false && $pagina > 1) {
+                $parametros['pagina'] = $pagina;
+            }
+        }
+        return http_build_query($parametros);
     }
 
     // ------------------------------------------------------------------
@@ -49,12 +223,14 @@ class Usuarios extends Controller
             // Guardamos o que a pessoa digitou para preencher o formulário de novo se houver erro.
             $dados['valores'] = [
                 'nome'     => Entrada::post('nome'),
-                'email'    => mb_strtolower(Entrada::post('email')),
+                'email'    => Checa::emailPadrao(Entrada::post('email')),
                 'telefone' => Entrada::post('telefone'),
             ];
             // Senhas não são "aparadas" (trim) nem devolvidas ao formulário.
-            $senha = isset($_POST['senha']) && is_string($_POST['senha']) ? $_POST['senha'] : '';
-            $confirma = isset($_POST['confirma_senha']) && is_string($_POST['confirma_senha']) ? $_POST['confirma_senha'] : '';
+            // A leitura agora passa por helper dedicado para padronizar a entrada e
+            // centralizar a regra em um único ponto da aplicação.
+            $senha = Entrada::postSenha('senha');
+            $confirma = Entrada::postSenha('confirma_senha');
             $v = $dados['valores'];
             $telefone = Checa::soDigitos($v['telefone']);
 
@@ -79,7 +255,7 @@ class Usuarios extends Controller
                 if ($v['telefone'] === '') {
                     $dados['erros']['telefone'] = 'Preencha o campo telefone.';
                 } elseif (!Checa::telefoneValido($v['telefone'])) {
-                    $dados['erros']['telefone'] = 'Informe o telefone com DDD (10 ou 11 números).';
+                    $dados['erros']['telefone'] = 'Telefone inválido. Use o formato (DD) 9 9999-9999 ou (DD) 9999-9999.';
                 } elseif ($this->usuarioModel->telefoneExiste($telefone)) {
                     $dados['erros']['telefone'] = 'Este telefone já está cadastrado.';
                 }
@@ -109,9 +285,13 @@ class Usuarios extends Controller
                     if ($novoId) {
                         $this->notificacaoModel->criar(
                             $novoId,
-                            'aviso',
                             'Bem-vindo ao Demandfy!',
                             'Seu cadastro foi concluído. Complete seu perfil e envie sua primeira demanda.'
+                        );
+                        $this->notificacaoModel->notificarModeradores(
+                            'Novo usuário',
+                            'Um novo usuário se cadastrou: ' . $v['nome'] . '.',
+                            $novoId
                         );
                         Sessao::mensagem('geral', 'Cadastro realizado com sucesso! Faça login para entrar.');
                         Url::redirecionar('login');
@@ -141,7 +321,7 @@ class Usuarios extends Controller
 
         if (Entrada::ehPost()) {
             $login = Entrada::post('login');
-            $senha = isset($_POST['senha']) && is_string($_POST['senha']) ? $_POST['senha'] : '';
+            $senha = Entrada::postSenha('senha');
             $dados['valores']['login'] = $login;
 
             if (!Csrf::validar()) {
@@ -154,7 +334,7 @@ class Usuarios extends Controller
                     $dados['erros']['senha'] = 'Preencha o campo senha.';
                 }
             } else {
-                $usuario = $this->usuarioModel->checarLogin(mb_strtolower($login), $senha);
+                $usuario = $this->usuarioModel->checarLogin(Checa::emailPadrao($login), $senha);
 
                 if ($usuario) {
                     Sessao::logar($usuario);
@@ -166,6 +346,116 @@ class Usuarios extends Controller
         }
 
         $this->viewSolo('usuarios/login', $dados);
+    }
+
+    public function esqueciSenha()
+    {
+        if (Sessao::estaLogado()) {
+            Url::redirecionar('');
+        }
+
+        $dados = [
+            'titulo'  => 'Recuperar senha',
+            'valores' => ['login' => ''],
+            'erros'   => [],
+        ];
+
+        if (Entrada::ehPost()) {
+            $this->validarCsrf('esqueci-senha');
+
+            $login = Entrada::post('login');
+            $dados['valores']['login'] = $login;
+
+            if ($login === '') {
+                $dados['erros']['login'] = 'Informe seu e-mail ou celular.';
+            } else {
+                require_once APP . '/Libraries/EmailService.php';
+
+                if (!\App\Libraries\EmailService::estaConfigurado()) {
+                    $dados['erros']['geral'] = 'O serviço de e-mail não está configurado. Configure o SMTP e tente novamente.';
+                } else {
+                    $usuario = $this->usuarioModel->buscarPorEmailOuTelefone($login);
+
+                    if ($usuario) {
+                        $token = bin2hex(random_bytes(32));
+                        $tokenHash = hash('sha256', $token);
+                        $expiraEm = date('Y-m-d H:i:s', time() + 3600);
+
+                        if (!$this->usuarioModel->armazenarTokenRedefinicao($usuario->id, $tokenHash, $expiraEm)) {
+                            $dados['erros']['geral'] = 'Não foi possível iniciar a recuperação. Tente novamente.';
+                        } else {
+                            $emailService = new \App\Libraries\EmailService();
+                            if (!$emailService->enviarRecuperacaoSenha($usuario->email, $token)) {
+                                if (!$this->usuarioModel->invalidarTokenRedefinicao($usuario->id)) {
+                                    error_log('Demandfy: não foi possível invalidar o token após falha no envio.');
+                                }
+                                $dados['erros']['geral'] = 'Não foi possível enviar o e-mail. Verifique a configuração SMTP e tente novamente.';
+                            }
+                        }
+                    }
+
+                    if (empty($dados['erros'])) {
+                        Sessao::mensagem('geral', 'Se o e-mail ou celular estiver cadastrado, você receberá um link para redefinir a senha.');
+                        Url::redirecionar('login');
+                    }
+                }
+            }
+        }
+
+        $this->viewSolo('usuarios/esqueci-senha', $dados);
+    }
+
+    public function redefinirSenha()
+    {
+        if (Sessao::estaLogado()) {
+            Url::redirecionar('');
+        }
+
+        $token = isset($_GET['token']) && is_string($_GET['token']) ? $_GET['token'] : '';
+        $dados = [
+            'titulo' => 'Nova senha',
+            'token' => $token,
+            'erros' => [],
+        ];
+
+        $tokenHash = preg_match('/\A[a-f0-9]{64}\z/', $token) ? hash('sha256', $token) : '';
+        if ($tokenHash === '' || !$this->usuarioModel->tokenRedefinicaoValido($tokenHash)) {
+            Sessao::mensagem('geral', 'Link de recuperação inválido ou expirado.', 'erro');
+            Url::redirecionar('login');
+        }
+
+        if (Entrada::ehPost()) {
+            $this->validarCsrf('redefinir-senha');
+
+            $nova = Entrada::postSenha('nova_senha');
+            $confirma = Entrada::postSenha('confirma_senha');
+
+            if ($nova === '') {
+                $dados['erros']['nova_senha'] = 'Informe a nova senha.';
+            } elseif (strlen($nova) < 6) {
+                $dados['erros']['nova_senha'] = 'A nova senha deve ter no mínimo 6 caracteres.';
+            }
+
+            if ($confirma === '') {
+                $dados['erros']['confirma_senha'] = 'Confirme a nova senha.';
+            } elseif ($nova !== $confirma) {
+                $dados['erros']['confirma_senha'] = 'As senhas são diferentes.';
+            }
+
+            if (empty($dados['erros'])) {
+                if ($this->usuarioModel->redefinirSenhaComToken(
+                    $tokenHash,
+                    password_hash($nova, PASSWORD_DEFAULT)
+                )) {
+                    Sessao::mensagem('geral', 'Senha redefinida com sucesso! Faça login com a nova senha.');
+                    Url::redirecionar('login');
+                }
+
+                $dados['erros']['geral'] = 'O link é inválido, expirou ou já foi usado. Solicite um novo link.';
+            }
+        }
+
+        $this->viewSolo('usuarios/redefinir-senha', $dados);
     }
 
     // ------------------------------------------------------------------
@@ -192,9 +482,14 @@ class Usuarios extends Controller
             Url::redirecionar('login');
         }
 
+        $podeEditarFuncao = Sessao::ehAdministrador()
+            || Sessao::temPermissao(Permissao::GERENCIAR_PERMISSOES);
+        $funcaoGremio = (string) ($usuario->funcao_gremio ?? '');
+
         $dados = [
             'titulo'  => 'Perfil',
             'editando' => false, // true = formulário já abre liberado para edição (quando há erro)
+            'mostrar_funcao' => $podeEditarFuncao,
             'valores' => [
                 'nome'         => $usuario->nome,
                 'email'        => $usuario->email,
@@ -205,6 +500,7 @@ class Usuarios extends Controller
                 'situacao'     => (string) $usuario->situacao,
                 'matricula'    => (string) $usuario->matricula,
                 'foto_perfil'  => (string) ($usuario->foto_perfil ?? ''),
+                'funcao_gremio' => $funcaoGremio,
             ],
             'erros'   => [],
         ];
@@ -260,14 +556,17 @@ class Usuarios extends Controller
 
             $v = [
                 'nome'         => Entrada::post('nome'),
-                'email'        => mb_strtolower(Entrada::post('email')),
+                'email'        => Checa::emailPadrao(Entrada::post('email')),
                 'telefone'     => Entrada::post('telefone'),
                 'instituicao'  => Entrada::post('instituicao'),
                 'curso'        => Entrada::post('curso'),
                 'ano_ingresso' => Entrada::post('ano_ingresso'),
-                'situacao'     => Entrada::post('situacao'),
+                'situacao'     => (string) $usuario->situacao,
                 'matricula'    => Entrada::post('matricula'),
                 'foto_perfil'  => $fotoNova === null ? $fotoAtual : $fotoNova,
+                'funcao_gremio' => $podeEditarFuncao
+                    ? Entrada::post('funcao_gremio')
+                    : $funcaoGremio,
             ];
             $dados['valores'] = $v;
             $dados['editando'] = true;
@@ -285,7 +584,7 @@ class Usuarios extends Controller
             }
 
             if (!Checa::telefoneValido($v['telefone'])) {
-                $dados['erros']['telefone'] = 'Informe o telefone com DDD (10 ou 11 números).';
+                $dados['erros']['telefone'] = 'Telefone inválido. Use o formato (DD) 9 9999-9999 ou (DD) 9999-9999.';
             } elseif ($this->usuarioModel->telefoneExiste($telefone, $id)) {
                 $dados['erros']['telefone'] = 'Este telefone já está em uso.';
             }
@@ -300,10 +599,19 @@ class Usuarios extends Controller
             }
 
             // Limites de tamanho dos campos de texto (batem com o banco).
-            foreach (['instituicao' => 120, 'curso' => 120, 'situacao' => 30, 'matricula' => 30] as $campo => $max) {
+            foreach (['instituicao' => 300, 'curso' => 200] as $campo => $max) {
                 if (mb_strlen($v[$campo]) > $max) {
                     $dados['erros'][$campo] = 'Máximo de ' . $max . ' caracteres.';
                 }
+            }
+
+            if (mb_strlen($v['funcao_gremio']) > 100) {
+                $dados['erros']['funcao_gremio'] = 'Máximo de 100 caracteres.';
+            }
+
+            if ($v['matricula'] !== ''
+                && (!ctype_digit($v['matricula']) || strlen($v['matricula']) > 13)) {
+                $dados['erros']['matricula'] = 'Informe uma matrícula numérica de até 13 dígitos.';
             }
 
             if (empty($dados['erros'])) {
@@ -317,6 +625,7 @@ class Usuarios extends Controller
                     'situacao'     => $v['situacao'],
                     'matricula'    => $v['matricula'],
                     'foto_perfil'  => $fotoNova === null ? $fotoAtual : $fotoNova,
+                    'funcao_gremio' => $v['funcao_gremio'],
                 ]);
 
                 if ($ok) {
@@ -356,41 +665,114 @@ class Usuarios extends Controller
     {
         $this->exigirLogin();
 
+        $usuario = $this->usuarioModel->lerUsuarioPorId(Sessao::usuarioId());
+        if (!$usuario) {
+            Sessao::mensagem('geral', 'Não foi possível carregar as configurações da conta.', 'erro');
+            Url::redirecionar('sair');
+        }
+
         $dados = [
-            'titulo' => 'Configurações',
-            'erros'  => [],
+            'titulo'       => 'Configurações',
+            'erros'        => [],
+            'preferencias' => [
+                'notificacao_email' => (bool) $usuario->notificacao_email,
+                'notificacao_site'  => (bool) $usuario->notificacao_site,
+                'tema'              => $usuario->tema,
+            ],
         ];
+        Sessao::definirTema($usuario->tema);
 
         if (Entrada::ehPost()) {
             $this->validarCsrf('configuracoes');
 
-            $atual = isset($_POST['senha_atual']) && is_string($_POST['senha_atual']) ? $_POST['senha_atual'] : '';
-            $nova = isset($_POST['nova_senha']) && is_string($_POST['nova_senha']) ? $_POST['nova_senha'] : '';
-            $confirma = isset($_POST['confirma_senha']) && is_string($_POST['confirma_senha']) ? $_POST['confirma_senha'] : '';
+            $notificacaoEmail = Entrada::post('notificacao_email');
+            $notificacaoSite = Entrada::post('notificacao_site');
+            $dados['preferencias'] = [
+                'notificacao_email' => $notificacaoEmail === ''
+                    ? (bool) $usuario->notificacao_email
+                    : $notificacaoEmail === '1',
+                'notificacao_site'  => $notificacaoSite === '1',
+                'tema'              => $usuario->tema,
+            ];
 
-            $usuario = $this->usuarioModel->lerUsuarioPorId(Sessao::usuarioId());
-
-            if ($atual === '') {
-                $dados['erros']['senha_atual'] = 'Informe a senha atual.';
-            } elseif (!$usuario || !password_verify($atual, $usuario->senha)) {
-                $dados['erros']['senha_atual'] = 'A senha atual está incorreta.';
+            if (!in_array($notificacaoEmail, ['', '0', '1'], true)
+                || !in_array($notificacaoSite, ['', '0', '1'], true)) {
+                $dados['erros']['geral'] = 'As preferências de notificação são inválidas.';
             }
+            $atual = Entrada::postSenha('senha_atual');
+            $nova = Entrada::postSenha('nova_senha');
+            $confirma = Entrada::postSenha('confirma_senha');
+            $alterarSenha = $atual !== '' || $nova !== '' || $confirma !== '';
 
-            if (strlen($nova) < 6) {
-                $dados['erros']['nova_senha'] = 'A nova senha deve ter no mínimo 6 caracteres.';
-            }
+            if ($alterarSenha) {
+                if ($atual === '') {
+                    $dados['erros']['senha_atual'] = 'Informe a senha atual.';
+                } elseif (!password_verify($atual, $usuario->senha)) {
+                    $dados['erros']['senha_atual'] = 'A senha atual está incorreta.';
+                }
 
-            if ($nova !== $confirma) {
-                $dados['erros']['confirma_senha'] = 'As senhas são diferentes.';
+                if (strlen($nova) < 6) {
+                    $dados['erros']['nova_senha'] = 'A nova senha deve ter no mínimo 6 caracteres.';
+                }
+
+                if ($nova !== $confirma) {
+                    $dados['erros']['confirma_senha'] = 'As senhas são diferentes.';
+                }
             }
 
             if (empty($dados['erros'])) {
-                $this->usuarioModel->atualizarSenha($usuario->id, password_hash($nova, PASSWORD_DEFAULT));
-                Sessao::mensagem('geral', 'Senha alterada com sucesso!');
-                Url::redirecionar('configuracoes');
+                $senhaHash = $alterarSenha ? password_hash($nova, PASSWORD_DEFAULT) : null;
+                if ($this->usuarioModel->atualizarConfiguracoes(
+                    $usuario->id,
+                    $dados['preferencias'],
+                    $senhaHash
+                )) {
+                    Sessao::definirTema($dados['preferencias']['tema']);
+                    $mensagem = $alterarSenha
+                        ? 'Configurações salvas e senha alterada com sucesso!'
+                        : 'Configurações salvas com sucesso!';
+                    Sessao::mensagem('geral', $mensagem);
+                    Url::redirecionar('configuracoes');
+                }
+                $dados['erros']['geral'] = 'Não foi possível salvar as configurações. Tente novamente.';
             }
         }
 
         $this->view('usuarios/configuracoes', $dados);
+    }
+
+    public function excluirConta()
+    {
+        $this->exigirLogin();
+        $this->exigirPost('configuracoes');
+        $this->validarCsrf('configuracoes');
+
+        $resultado = $this->model('Permissao')->excluirContaPropria(Sessao::usuarioId());
+        if ($resultado['status'] === 'excluido') {
+            $fotoPerfil = (string) ($resultado['foto_perfil'] ?? '');
+            if (preg_match('~^uploads/perfis/[a-f0-9]{32}\.(?:jpg|png|webp)$~D', $fotoPerfil)) {
+                $caminhoFoto = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'public'
+                    . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $fotoPerfil);
+                if (is_file($caminhoFoto) && !unlink($caminhoFoto)) {
+                    error_log('Demandfy - não foi possível remover a foto de perfil da conta excluída.');
+                }
+            }
+
+            Sessao::sair();
+            Sessao::mensagem('geral', 'Sua conta foi excluída com sucesso.');
+            Url::redirecionar('login');
+        }
+
+        if ($resultado['status'] === 'com_registros') {
+            Sessao::mensagem(
+                'geral',
+                'Sua conta não pode ser excluída porque há demandas, sugestões, avisos, instituições, respostas ou histórico vinculados. Remova esses registros antes de tentar novamente.',
+                'erro'
+            );
+        } else {
+            Sessao::mensagem('geral', 'Não foi possível excluir sua conta. Atualize a página e tente novamente.', 'erro');
+        }
+
+        Url::redirecionar('configuracoes');
     }
 }

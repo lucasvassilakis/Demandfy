@@ -10,11 +10,13 @@ class Paginas extends Controller
 {
     private $demandaModel;
     private $avisoModel;
+    private $usuarioModel;
 
     public function __construct()
     {
         $this->demandaModel = $this->model('Demanda');
         $this->avisoModel = $this->model('Aviso');
+        $this->usuarioModel = $this->model('Usuario');
     }
 
     // Página inicial (painel). Agora mostra dados REAIS do usuário logado.
@@ -23,6 +25,7 @@ class Paginas extends Controller
         $this->exigirLogin();
 
         $usuarioId = Sessao::usuarioId();
+        $ehModerador = Sessao::ehAdministrador() || Sessao::ehModerador();
 
         $dados = [
             'titulo'    => 'Início',
@@ -32,7 +35,14 @@ class Paginas extends Controller
             'recentes'  => $this->demandaModel->listarPorUsuario($usuarioId, 2),
             // os 3 avisos mais recentes
             'avisos'    => $this->avisoModel->listar(null, 3),
+            'avisosDisponiveis' => $this->avisoModel->disponivel(),
+            'ehModerador' => $ehModerador,
         ];
+
+        if ($ehModerador) {
+            $dados['estatisticasModerador'] = $this->demandaModel->resumoGlobal();
+            $dados['totalUsuarios'] = $this->usuarioModel->contarTodos();
+        }
 
         $this->view('paginas/inicio', $dados);
     }

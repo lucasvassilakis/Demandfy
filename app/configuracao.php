@@ -11,7 +11,8 @@
 define('APP', dirname(__FILE__));
 
 // URL base do sistema. Se mudar a pasta ou o domínio, altere somente aqui.
-define('URL', 'http://localhost/Demandfy');
+// Também aceita sobrescrita por variável de ambiente para facilitar deploy em diferentes ambientes.
+define('URL', getenv('DEMANDFY_URL') ?: 'http://localhost/Demandfy');
 
 define('APP_NAME', 'Demandfy');
 const APP_VERSAO = '1.0.0';
@@ -25,12 +26,11 @@ date_default_timezone_set('America/Porto_Velho');
  * DADOS DE CONEXÃO COM O BANCO
  * Podem ser definidos por variável de ambiente (DEMANDFY_DB_*) ou, se não existirem,
  * usam o valor padrão depois do "?:".
- * O XAMPP deste ambiente usa a porta 3307; o banco "demandfy" é criado por
- * database/schema.sql.
+ * O banco "bd_demandfy" corresponde ao dump em database/bd_demandfy.sql.
  * Se o seu MySQL usa outra porta/banco, altere os valores padrão abaixo.
  */
 define('DB_HOST', getenv('DEMANDFY_DB_HOST') ?: '127.0.0.1');
 define('DB_USER', getenv('DEMANDFY_DB_USER') ?: 'root');
 define('DB_PASS', getenv('DEMANDFY_DB_PASS') ?: '');
-define('DB_NAME', getenv('DEMANDFY_DB_NAME') ?: 'demandfy');
-define('DB_PORT', getenv('DEMANDFY_DB_PORT') ?: '3307');
+define('DB_NAME', getenv('DEMANDFY_DB_NAME') ?: 'bd_demandfy');
+define('DB_PORT', getenv('DEMANDFY_DB_PORT') ?: '3306');

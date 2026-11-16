@@ -68,15 +68,101 @@ class Sessao
     {
         // Gera um novo ID de sessão ao logar (evita "session fixation").
         session_regenerate_id(true);
+        unset($_SESSION['usuario_administrador']);
         $_SESSION['usuario_id'] = (int) $usuario->id;
         $_SESSION['usuario_nome'] = $usuario->nome;
         $_SESSION['usuario_email'] = $usuario->email;
+        $permissoes = new Permissao();
+        if ($permissoes->usuarioTem((int) $usuario->id, 'admin')) {
+            $_SESSION['usuario_administrador'] = true;
+        } else {
+            unset($_SESSION['usuario_administrador']);
+        }
+        self::definirTema(isset($usuario->tema) ? $usuario->tema : 'claro');
     }
 
-    // Encerra o login. Limpa a sessão inteira e gera um ID novo.
+    public static function ehAdministrador()
+    {
+        $usuarioId = self::usuarioId();
+        if ($usuarioId <= 0) {
+            return false;
+        }
+
+        static $usuarioVerificado = 0;
+        static $administradorVerificado = false;
+        if ($usuarioVerificado !== $usuarioId) {
+            $permissoes = new Permissao();
+            $administradorVerificado = $permissoes->usuarioTem($usuarioId, 'admin');
+            $usuarioVerificado = $usuarioId;
+            if ($administradorVerificado) {
+                $_SESSION['usuario_administrador'] = true;
+            } else {
+                unset($_SESSION['usuario_administrador']);
+            }
+        }
+        return $administradorVerificado;
+    }
+
+    public static function definirAdministrador($ehAdministrador)
+    {
+        if ($ehAdministrador) {
+            $_SESSION['usuario_administrador'] = true;
+        } else {
+            unset($_SESSION['usuario_administrador']);
+        }
+    }
+
+    public static function ehModerador()
+    {
+        $usuarioId = self::usuarioId();
+        if ($usuarioId <= 0) {
+            return false;
+        }
+
+        $permissoes = new Permissao();
+        return $permissoes->usuarioTem($usuarioId, Permissao::GERENCIAR_PERMISSOES);
+    }
+
+    public static function temPermissao($permissao)
+    {
+        if (self::ehAdministrador()) {
+            return true;
+        }
+
+        $usuarioId = self::usuarioId();
+        if ($usuarioId <= 0 || !is_string($permissao)) {
+            return false;
+        }
+
+        $modelo = new Permissao();
+        return $modelo->usuarioTem($usuarioId, $permissao);
+    }
+
+    // Encerra o login. Limpa a sessão inteira, remove o cookie e cria uma sessão
+    // nova para evitar reuso indevido de dados do usuário anterior.
     public static function sair()
     {
         $_SESSION = [];
+
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            if (ini_get('session.use_cookies')) {
+                $params = session_get_cookie_params();
+                setcookie(
+                    session_name(),
+                    '',
+                    time() - 42000,
+                    $params['path'],
+                    $params['domain'],
+                    $params['secure'],
+                    $params['httponly']
+                );
+            }
+
+            session_unset();
+            session_destroy();
+        }
+
+        session_start();
         session_regenerate_id(true);
     }
 
@@ -88,5 +174,19 @@ class Sessao
     public static function usuarioNome()
     {
         return isset($_SESSION['usuario_nome']) ? $_SESSION['usuario_nome'] : '';
+    }
+
+    public static function definirTema($tema)
+    {
+        if (in_array($tema, ['claro', 'escuro'], true)) {
+            $_SESSION['usuario_tema'] = $tema;
+        }
+    }
+
+    public static function tema()
+    {
+        return isset($_SESSION['usuario_tema']) && $_SESSION['usuario_tema'] === 'escuro'
+            ? 'escuro'
+            : 'claro';
     }
 }

@@ -22,11 +22,13 @@ class Rota
 
     // URL curta => [Controller, método]
     private $atalhos = [
-        'login'         => ['Usuarios', 'login'],
-        'cadastro'      => ['Usuarios', 'cadastrar'],
-        'sair'          => ['Usuarios', 'sair'],
-        'perfil'        => ['Usuarios', 'perfil'],
-        'configuracoes' => ['Usuarios', 'configuracoes'],
+        'login'          => ['Usuarios', 'login'],
+        'cadastro'       => ['Usuarios', 'cadastrar'],
+        'esqueci-senha'  => ['Usuarios', 'esqueciSenha'],
+        'redefinir-senha' => ['Usuarios', 'redefinirSenha'],
+        'sair'           => ['Usuarios', 'sair'],
+        'perfil'         => ['Usuarios', 'perfil'],
+        'configuracoes'  => ['Usuarios', 'configuracoes'],
     ];
 
     public function __construct()
@@ -98,17 +100,26 @@ class Rota
         $paginas->erro404();
     }
 
-    // Lê ?url=... (enviado pelo .htaccess) e devolve array: ['demandas','ver','5']
+    // Lê ?url=... (enviado pelo .htaccess) e devolve array: ['demandas','ver','5'].
+    // A validação aqui impede valores estranhos como traversal de diretório ou
+    // caracteres que não fazem parte de uma rota segura do sistema.
     private function url()
     {
         $url = filter_input(INPUT_GET, 'url', FILTER_SANITIZE_URL);
 
-        if (empty($url)) {
+        if ($url === null || $url === false || trim((string) $url) === '') {
             return [];
         }
 
-        $url = trim($url, '/');
+        $url = trim((string) $url, '/');
+        if ($url === '') {
+            return [];
+        }
 
-        return $url === '' ? [] : explode('/', $url);
+        $segmentos = array_values(array_filter(explode('/', $url), static function ($segmento) {
+            return $segmento !== '' && preg_match('/^[A-Za-z0-9_-]+$/', $segmento) === 1;
+        }));
+
+        return $segmentos;
     }
 }

@@ -54,6 +54,15 @@ class Controller
         }
     }
 
+    protected function exigirPermissao($permissao)
+    {
+        $this->exigirLogin();
+        if (!Sessao::temPermissao($permissao)) {
+            Sessao::mensagem('geral', 'Você não tem permissão para acessar este recurso.', 'erro');
+            Url::redirecionar('');
+        }
+    }
+
     // Mostra a página de erro 404 (usada quando o registro não existe ou não é do usuário).
     protected function naoEncontrado()
     {

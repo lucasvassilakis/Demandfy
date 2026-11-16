@@ -31,15 +31,22 @@ $erros = $dados['erros'];
                 <?= Csrf::campo() ?>
 
                 <div class="form-group">
-                    <label for="login" class="form-label">E-mail/celular</label>
+                    <label for="login" class="form-label">E-mail ou celular</label>
                     <input type="text" id="login" name="login" class="form-input"
-                           value="<?= Html::e($dados['valores']['login']) ?>" autocomplete="username" required>
+                           value="<?= Html::e($dados['valores']['login']) ?>"
+                           placeholder="seu@gmail.com ou (69) 9 9999-9999"
+                           autocomplete="username"
+                           inputmode="email"
+                           required>
                     <?php if (!empty($erros['login'])): ?><span class="erro-campo"><?= Html::e($erros['login']) ?></span><?php endif; ?>
                 </div>
 
                 <div class="form-group">
                     <label for="senha" class="form-label">Senha</label>
-                    <input type="password" id="senha" name="senha" class="form-input" autocomplete="current-password" required>
+                    <div class="senha-wrapper">
+                        <input type="password" id="senha" name="senha" class="form-input senha-input" autocomplete="current-password" required>
+                        <button type="button" class="senha-toggle" aria-label="Mostrar senha">Mostrar</button>
+                    </div>
                     <?php if (!empty($erros['senha'])): ?><span class="erro-campo"><?= Html::e($erros['senha']) ?></span><?php endif; ?>
                 </div>
 
@@ -47,11 +54,24 @@ $erros = $dados['erros'];
             </form>
 
             <div class="login-footer">
-                <p class="footer-section">Esqueceu a senha? <a href="#" class="link-blue">Esqueci minha senha</a></p>
                 <p class="footer-section">Ainda não é cadastrado? <a href="<?= URL ?>/cadastro" class="link-blue">Cadastre-se</a></p>
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.senha-toggle').forEach(function (botao) {
+                botao.addEventListener('click', function () {
+                    var campo = botao.parentElement.querySelector('.senha-input');
+                    if (!campo) { return; }
+                    var mostrar = campo.type === 'password';
+                    campo.type = mostrar ? 'text' : 'password';
+                    botao.textContent = mostrar ? 'Ocultar' : 'Mostrar';
+                });
+            });
+        });
+    </script>
 
     <!-- Imagem decorativa na direita -->
     <div class="login-decoration">

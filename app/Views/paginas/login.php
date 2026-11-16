@@ -27,7 +27,6 @@
             </form>
 
             <div class="login-footer">
-                <p class="footer-section">Esqueceu a senha? <a href="#" class="link-blue">Esqueci minha senha</a></p>
                 <p class="footer-section">Ainda não é cadastrado? <a href="<?php echo URL; ?>/cadastro" class="link-blue">Cadastre-se</a></p>
             </div>
         </div>

@@ -11,6 +11,7 @@
  */
 $urlAtual = trim((string) filter_input(INPUT_GET, 'url', FILTER_SANITIZE_URL), '/');
 $secaoAtual = $urlAtual === '' ? '' : explode('/', $urlAtual)[0];
+$podeVerUsuarios = Sessao::ehAdministrador() || Sessao::ehModerador();
 
 // "demandas" faz parte da área RDD, então destaca o item RDD - Sugestões.
 if ($secaoAtual === 'demandas') {
@@ -21,16 +22,25 @@ if ($secaoAtual === 'demandas') {
 $itensMenu = [
     ['',              'Início',          'Página Inicial', 'home.png'],
     ['sugestoes',     'RDD - Sugestões', 'Sugestões',      'idea.png'],
+    ['historico',     'Histórico',       'Histórico',      'Activity%20History.png'],
     ['calendario',    'Calendário',      'Calendário',     'calendar.png'],
     ['avisos',        'Avisos',          'Avisos',         'megaphone.png'],
     ['notificacoes',  'Notificações',    'Notificações',   'notification.png'],
     ['perfil',        'Perfil',          'Perfil de ' . Sessao::usuarioNome(), 'perfil-de-usuario.png'],
     ['configuracoes', 'Configurações',   'Configurações',  'setting.png'],
 ];
+if ($podeVerUsuarios) {
+    array_splice($itensMenu, 5, 0, [[
+        'usuarios',
+        'Usuários',
+        'Usuários',
+        'User%20Account.png',
+    ]]);
+}
 ?>
 <header>
     <div class="container">
-        <nav class="sidebar">
+        <nav class="sidebar<?= $podeVerUsuarios ? ' sidebar-com-usuarios' : '' ?>">
             <a class="navbar-brand" href="<?= URL ?>"><img src="<?= URL ?>/img/Demandfy.png" alt="Demandfy"></a>
             <div class="navbar">
                 <div class="search-container">
@@ -42,8 +52,9 @@ $itensMenu = [
                         <li class="nav-item">
                             <a class="nav-link<?= $secaoAtual === $item[0] ? ' active' : '' ?>"
                                href="<?= URL . ($item[0] === '' ? '' : '/' . $item[0]) ?>"
-                               data-tooltip="tooltip" title="<?= Html::e($item[2]) ?>">
-                                <img class="nav-img" src="<?= URL ?>/img/<?= Html::e($item[3]) ?>" alt="">
+                               data-tooltip="tooltip" title="<?= Html::e($item[2]) ?>"
+                               aria-label="<?= Html::e($item[2]) ?>">
+                                <img class="nav-img<?= $item[0] === 'usuarios' ? ' nav-img-usuarios' : '' ?>" src="<?= URL ?>/img/<?= Html::e($item[3]) ?>" alt="">
                                 <span class="nav-text"><?= Html::e($item[1]) ?></span>
                             </a>
                         </li>
@@ -51,7 +62,7 @@ $itensMenu = [
                 </ul>
             </div>
             <div class="logout-container">
-                <a class="nav-link logout-link" href="<?= URL ?>/sair" data-tooltip="tooltip" title="Sair"><img class="nav-img" src="<?= URL ?>/img/logout.png" alt=""><span class="nav-text logout-text">Sair</span></a>
+                <a class="nav-link logout-link" href="<?= URL ?>/sair" data-tooltip="tooltip" title="Sair" aria-label="Sair"><img class="nav-img" src="<?= URL ?>/img/logout.png" alt=""><span class="nav-text logout-text">Sair</span></a>
             </div>
         </nav>
     </div>

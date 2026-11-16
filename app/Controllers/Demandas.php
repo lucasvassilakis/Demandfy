@@ -5,8 +5,8 @@
  * Equivale ao controller Posts do framework2026 (listar, ver, cadastrar, deletar).
  *
  * URLs:
- *   /demandas              -> index()    lista as minhas demandas
- *   /demandas/ver/5        -> ver(5)     detalhe de uma demanda
+ *   /demandas              -> index()    redireciona ao histórico
+ *   /demandas/ver/5        -> ver(5)     redireciona para a demanda no histórico
  *   /demandas/criar        -> criar()    recebe o formulário de /sugestoes (POST)
  *   /demandas/excluir/5    -> excluir(5) apaga uma demanda (POST)
  *
@@ -24,38 +24,25 @@ class Demandas extends Controller
         $this->notificacaoModel = $this->model('Notificacao');
     }
 
-    // Lista todas as demandas do usuário logado.
+    // Mantém a rota antiga funcionando sem exibir a página removida.
     public function index()
     {
         $this->exigirLogin();
-
-        $dados = [
-            'titulo'   => 'Minhas Demandas',
-            'demandas' => $this->demandaModel->listarPorUsuario(Sessao::usuarioId()),
-        ];
-
-        $this->view('demandas/index', $dados);
+        Url::redirecionar('historico?tipo=demandas');
     }
 
-    // Detalhe de uma demanda.
+    // Mantém a URL antiga, mas leva ao item correspondente no histórico.
     public function ver($id)
     {
         $this->exigirLogin();
 
-        $demanda = $this->demandaModel->lerDemandaPorId((int) $id);
-
-        // Não existe ou é de outra pessoa: mesma resposta (404) para não revelar nada.
-        if (!$demanda || (int) $demanda->usuario_id !== Sessao::usuarioId()) {
+        $id = (int) $id;
+        if (!$this->demandaModel->lerHistoricoPorIdDoUsuario($id, Sessao::usuarioId())) {
             $this->naoEncontrado();
             return;
         }
 
-        $dados = [
-            'titulo'  => 'Demanda #' . $demanda->id,
-            'demanda' => $demanda,
-        ];
-
-        $this->view('demandas/ver', $dados);
+        Url::redirecionar('historico?tipo=demandas&demanda=' . $id . '#historico-item-demanda-' . $id);
     }
 
     // Recebe o formulário "Nova Demanda" da página /sugestoes.
@@ -113,13 +100,17 @@ class Demandas extends Controller
 
         $this->notificacaoModel->criar(
             Sessao::usuarioId(),
-            'demanda',
             'Demanda enviada',
             'Sua demanda #' . $id . ' "' . $v['titulo'] . '" foi enviada ao Grêmio.'
         );
+        $this->notificacaoModel->notificarModeradores(
+            'Nova demanda',
+            'A demanda #' . $id . ' "' . $v['titulo'] . '" foi enviada.',
+            Sessao::usuarioId()
+        );
 
         Sessao::mensagem('geral', 'Demanda enviada com sucesso!');
-        Url::redirecionar('demandas');
+        Url::redirecionar('historico?tipo=demandas');
     }
 
     // Apaga uma demanda (somente do próprio usuário e somente por POST).
@@ -133,7 +124,7 @@ class Demandas extends Controller
 
         if (!$demanda || (int) $demanda->usuario_id !== Sessao::usuarioId()) {
             Sessao::mensagem('geral', 'Você não tem autorização para excluir esta demanda.', 'erro');
-            Url::redirecionar('demandas');
+            Url::redirecionar('historico?tipo=demandas');
         }
 
         if ($this->demandaModel->excluir((int) $id)) {
@@ -141,6 +132,6 @@ class Demandas extends Controller
         } else {
             Sessao::mensagem('geral', 'Não foi possível excluir a demanda.', 'erro');
         }
-        Url::redirecionar('demandas');
+        Url::redirecionar('historico?tipo=demandas');
     }
 }

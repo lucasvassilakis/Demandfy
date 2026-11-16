@@ -28,6 +28,10 @@ class Database
             PDO::ATTR_PERSISTENT => true,
             // Erros do banco viram exceções (PDOException) em vez de falhas silenciosas.
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            // Garante que os dados venham em objetos e que os parâmetros sejam enviados
+            // ao banco com o tipo correto, sem emulação excessiva do driver.
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+            PDO::ATTR_EMULATE_PREPARES => false,
             // Define o fuso horário do MySQL igual ao do PHP (ex.: -04:00), assim NOW() e
             // as datas exibidas ("há 5 minutos") ficam coerentes.
             PDO::MYSQL_ATTR_INIT_COMMAND => "SET time_zone = '" . date('P') . "'",
@@ -46,12 +50,20 @@ class Database
     // Prepara a consulta SQL (ainda não executa).
     public function query($sql)
     {
+        if (!is_string($sql) || trim($sql) === '') {
+            throw new InvalidArgumentException('SQL inválida para execução no banco.');
+        }
+
         $this->stmt = $this->dbh->prepare($sql);
     }
 
     // Vincula um valor a um parâmetro (:nome) detectando o tipo automaticamente.
     public function bind($parametro, $valor, $tipo = null)
     {
+        if (!isset($this->stmt)) {
+            throw new LogicException('Chamada de bind() sem preparar a consulta antes.');
+        }
+
         if (is_null($tipo)) {
             switch (true) {
                 case is_int($valor):
@@ -74,6 +86,10 @@ class Database
     // Executa a consulta preparada (INSERT, UPDATE, DELETE...). Retorna true/false.
     public function executa()
     {
+        if (!isset($this->stmt)) {
+            throw new LogicException('Chamada de executa() sem query() antes.');
+        }
+
         return $this->stmt->execute();
     }
 

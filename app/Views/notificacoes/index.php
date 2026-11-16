@@ -28,10 +28,9 @@ $somenteNaoLidas = $dados['somenteNaoLidas'];
             <?php endif; ?>
 
             <?php foreach ($dados['notificacoes'] as $n): ?>
-                <?php $icone = Notificacao::ICONES[$n->tipo] ?? 'NotificacaoCommercial.png'; ?>
                 <li class="notificacao-item<?= $n->lida ? '' : ' nao-lida' ?>">
                     <div class="notificacao-icone verde">
-                        <img src="<?= URL ?>/img/<?= Html::e($icone) ?>" alt="">
+                        <img src="<?= URL ?>/img/NotificacaoCommercial.png" alt="">
                     </div>
 
                     <div class="notificacao-conteudo">
@@ -39,7 +38,6 @@ $somenteNaoLidas = $dados['somenteNaoLidas'];
                         <p><?= Html::e($n->mensagem) ?></p>
                     </div>
 
-                    <time><?= Html::e(Checa::tempoAtras($n->criado_em)) ?></time>
                 </li>
             <?php endforeach; ?>
         </ul>

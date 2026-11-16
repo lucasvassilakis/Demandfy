@@ -1,6 +1,6 @@
 <?php // View: Página de perfil - baseado na referência fornecida ?>
 <style>
-  .perfil{padding:30px;background:transparent;min-height:80vh;font-family:Arial,Helvetica,sans-serif}
+  .perfil{padding:30px;background:transparent;min-height:80vh;font-family:var(--font-itim)}
   .perfil .titulo{font-weight:700}
 
   .perfil{width:calc(100% - 80px);max-width:1120px;margin:0 0 0 80px;padding-top:1px}

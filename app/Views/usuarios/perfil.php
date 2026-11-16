@@ -29,7 +29,7 @@ $ro = $editando ? '' : 'readonly';
   .perfil-foto-escolher{display:inline-flex;align-items:center;min-height:36px;padding:7px 12px;border:1px solid var(--border-green);border-radius:6px;background:#fff;color:var(--primary-green);cursor:pointer;font-family:var(--font-poppins);font-size:12px;font-weight:600}
   .perfil-foto-escolher:hover{background:var(--bg-green-light)}
   .perfil-foto-ajuda{color:var(--text-subtle);font-family:var(--font-poppins);font-size:12px}
-  .perfil-foto-input{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;clip-path:inset(50%)}
+  .perfil-formulario .perfil-foto-input{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;clip-path:inset(50%)}
   .perfil-foto-input:focus-visible+.perfil-foto-escolher{outline:2px solid var(--primary-green);outline-offset:2px}
   .perfil-secao{margin-top:25px}
   .perfil-secao h3{margin:0 0 16px;color:var(--primary-green);font-size:18px;font-weight:500}
@@ -108,12 +108,12 @@ $ro = $editando ? '' : 'readonly';
           </div>
           <div class="perfil-campo">
             <label for="telefone">Telefone</label>
-            <input type="text" id="telefone" name="telefone" <?= $ro ?> maxlength="20" placeholder="ex: 69 9990-0000" value="<?= Html::e($v['telefone']) ?>">
+            <input type="text" id="telefone" name="telefone" class="telefone-input" <?= $ro ?> maxlength="20" placeholder="(69) 9 9999-9999" value="<?= Html::e($v['telefone']) ?>" inputmode="numeric">
             <?php if (!empty($erros['telefone'])): ?><span class="erro-campo"><?= Html::e($erros['telefone']) ?></span><?php endif; ?>
           </div>
           <div class="perfil-campo">
             <label for="matricula">Matrícula</label>
-            <input type="text" id="matricula" name="matricula" <?= $ro ?> maxlength="30" placeholder="ex: 2020109100000" value="<?= Html::e($v['matricula']) ?>">
+            <input type="text" id="matricula" name="matricula" <?= $ro ?> maxlength="13" inputmode="numeric" placeholder="ex: 202010910001" value="<?= Html::e($v['matricula']) ?>">
             <?php if (!empty($erros['matricula'])): ?><span class="erro-campo"><?= Html::e($erros['matricula']) ?></span><?php endif; ?>
           </div>
         </div>
@@ -124,12 +124,12 @@ $ro = $editando ? '' : 'readonly';
         <div class="perfil-campos">
           <div class="perfil-campo">
             <label for="instituicao">Instituição</label>
-            <input type="text" id="instituicao" name="instituicao" <?= $ro ?> maxlength="120" placeholder="ex: IFRO - Campus Guajará-Mirim" value="<?= Html::e($v['instituicao']) ?>">
+            <input type="text" id="instituicao" name="instituicao" <?= $ro ?> maxlength="300" placeholder="ex: IFRO - Campus Guajará-Mirim" value="<?= Html::e($v['instituicao']) ?>">
             <?php if (!empty($erros['instituicao'])): ?><span class="erro-campo"><?= Html::e($erros['instituicao']) ?></span><?php endif; ?>
           </div>
           <div class="perfil-campo">
             <label for="curso">Curso</label>
-            <input type="text" id="curso" name="curso" <?= $ro ?> maxlength="120" placeholder="ex: Técnico em Informática" value="<?= Html::e($v['curso']) ?>">
+            <input type="text" id="curso" name="curso" <?= $ro ?> maxlength="200" placeholder="ex: Técnico em Informática" value="<?= Html::e($v['curso']) ?>">
             <?php if (!empty($erros['curso'])): ?><span class="erro-campo"><?= Html::e($erros['curso']) ?></span><?php endif; ?>
           </div>
           <div class="perfil-campo">
@@ -142,6 +142,13 @@ $ro = $editando ? '' : 'readonly';
             <input type="text" id="situacao" name="situacao" <?= $ro ?> maxlength="30" placeholder="ex: Ativo" value="<?= Html::e($v['situacao']) ?>">
             <?php if (!empty($erros['situacao'])): ?><span class="erro-campo"><?= Html::e($erros['situacao']) ?></span><?php endif; ?>
           </div>
+          <?php if (!empty($dados['mostrar_funcao'])): ?>
+            <div class="perfil-campo">
+              <label for="funcao_gremio">Função</label>
+              <input type="text" id="funcao_gremio" name="funcao_gremio" <?= $ro ?> maxlength="100" placeholder="ex: Presidente do Grêmio" value="<?= Html::e($v['funcao_gremio']) ?>">
+              <?php if (!empty($erros['funcao_gremio'])): ?><span class="erro-campo"><?= Html::e($erros['funcao_gremio']) ?></span><?php endif; ?>
+            </div>
+          <?php endif; ?>
         </div>
       </section>
 
@@ -161,10 +168,28 @@ $ro = $editando ? '' : 'readonly';
     var acoes = document.getElementById('perfil-acoes');
     var foto = document.getElementById('foto_perfil');
     var preview = document.getElementById('foto-perfil-preview');
+    var formatarTelefone = function (valor) {
+      var digits = (valor || '').replace(/\D/g, '').slice(0, 11);
+      if (!digits) { return ''; }
+      if (digits.length <= 2) { return '(' + digits; }
+      if (digits.length <= 7) { return '(' + digits.slice(0, 2) + ') ' + digits.slice(2); }
+      if (digits.length <= 10) { return '(' + digits.slice(0, 2) + ') ' + digits.slice(2, 6) + '-' + digits.slice(6); }
+      return '(' + digits.slice(0, 2) + ') ' + digits[2] + ' ' + digits.slice(3, 7) + '-' + digits.slice(7, 11);
+    };
+
+    var telefone = document.getElementById('telefone');
+    if (telefone) {
+      telefone.addEventListener('input', function () {
+        telefone.value = formatarTelefone(telefone.value);
+      });
+    }
+
     if (!botao || !form) { return; }
     botao.addEventListener('click', function () {
       var campos = form.querySelectorAll('input[type=text], input[type=email]');
-      for (var i = 0; i < campos.length; i++) { campos[i].removeAttribute('readonly'); }
+      for (var i = 0; i < campos.length; i++) {
+        if (campos[i].id !== 'situacao') { campos[i].removeAttribute('readonly'); }
+      }
       acoes.classList.add('visivel');
       document.getElementById('nome').focus();
     });

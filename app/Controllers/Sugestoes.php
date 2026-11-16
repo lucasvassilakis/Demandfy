@@ -21,25 +21,76 @@ class Sugestoes extends Controller
         $this->notificacaoModel = $this->model('Notificacao');
     }
 
-    // Exibe a página com os dois formulários e as últimas sugestões enviadas.
+    // Exibe a página com os formulários de demanda e sugestão.
     public function index()
     {
         $this->exigirLogin();
 
-        $vazio = ['erros' => [], 'valores' => ['titulo' => '', 'descricao' => '', 'categoria' => '']];
-
         // flashDados lê e apaga: o erro aparece uma vez só.
         $formDemanda = Sessao::flashDados('form_demanda');
         $formSugestao = Sessao::flashDados('form_sugestao');
-
-        $dados = [
-            'titulo'        => 'RDD - Sugestões',
-            'formDemanda'   => $formDemanda ? $formDemanda : $vazio,
-            'formSugestao'  => $formSugestao ? $formSugestao : $vazio,
-            'minhasSugestoes' => $this->sugestaoModel->listarPorUsuario(Sessao::usuarioId(), 5),
+        $valoresDemanda = [
+            'erros' => [],
+            'valores' => ['titulo' => '', 'descricao' => '', 'categoria' => ''],
+        ];
+        $valoresSugestao = [
+            'erros' => [],
+            'valores' => ['titulo' => '', 'descricao' => '', 'categoria' => ''],
         ];
 
+        $modoModerador = Sessao::ehAdministrador() || Sessao::ehModerador();
+        $dados = [
+            'titulo'        => 'RDD - Sugestões',
+            'modoModerador' => $modoModerador,
+            'formDemanda'   => $formDemanda
+                ? array_replace_recursive($valoresDemanda, $formDemanda)
+                : $valoresDemanda,
+            'formSugestao'  => $formSugestao
+                ? array_replace_recursive($valoresSugestao, $formSugestao)
+                : $valoresSugestao,
+        ];
+
+        if ($modoModerador) {
+            $demandaModel = $this->model('Demanda');
+            $dados['resumoDemandas'] = $demandaModel->resumoModeracaoGlobal();
+            $dados['resumoSugestoes'] = $this->sugestaoModel->resumoModeracaoGlobal();
+            $dados['demandasRecentes'] = $this->prepararRegistros($demandaModel->listarTodasHistorico(5, 0), 'demanda');
+            $dados['sugestoesRecentes'] = $this->prepararRegistros($this->sugestaoModel->listarTodasHistorico(5, 0), 'sugestao');
+        }
+
         $this->view('sugestoes/index', $dados);
+    }
+
+    private function prepararRegistros($registros, $tipo)
+    {
+        $status = $tipo === 'demanda'
+            ? [
+                'aberta' => ['Em análise', 'analise'],
+                'aguardando' => ['Em análise', 'analise'],
+                'em_analise' => ['Em análise', 'analise'],
+                'em_andamento' => ['Em andamento', 'andamento'],
+                'deferido' => ['Resolvido', 'resolvido'],
+                'resolvida' => ['Resolvido', 'resolvido'],
+                'cancelada' => ['Negado', 'negado'],
+            ]
+            : [
+                'enviada' => ['Em análise', 'analise'],
+                'em_analise' => ['Em análise', 'analise'],
+                'em_andamento' => ['Em andamento', 'andamento'],
+                'aceita' => ['Resolvida', 'resolvido'],
+                'recusada' => ['Negada', 'negado'],
+            ];
+
+        foreach ($registros as $registro) {
+            $estado = isset($status[$registro->status])
+                ? $status[$registro->status]
+                : [$registro->status, 'analise'];
+            $registro->statusTexto = $estado[0];
+            $registro->statusClasse = $estado[1];
+            $timestamp = strtotime($registro->criado_em);
+            $registro->criadoEmTexto = $timestamp ? date('d/m/Y', $timestamp) : '—';
+        }
+        return $registros;
     }
 
     // Recebe o formulário "Nova Sugestão".
@@ -95,12 +146,16 @@ class Sugestoes extends Controller
 
         $this->notificacaoModel->criar(
             Sessao::usuarioId(),
-            'sugestao',
             'Sugestão enviada',
             'Sua sugestão "' . $v['titulo'] . '" foi registrada. Obrigado por participar!'
         );
+        $this->notificacaoModel->notificarModeradores(
+            'Nova sugestão',
+            'A sugestão #' . $id . ' "' . $v['titulo'] . '" foi registrada.',
+            Sessao::usuarioId()
+        );
 
         Sessao::mensagem('geral', 'Sugestão enviada com sucesso!');
-        Url::redirecionar('sugestoes');
+        Url::redirecionar('historico?tipo=sugestoes');
     }
 }
