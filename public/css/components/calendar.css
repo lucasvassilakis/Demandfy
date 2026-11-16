@@ -61,7 +61,7 @@
     background: var(--bg-white);
     color: var(--text-disabled);
     cursor: pointer;
-    font-family: Arial, sans-serif;
+    font-family: var(--font-itim);
     font-size: 18px;
     line-height: 1;
 }
@@ -270,4 +270,496 @@
 
 .eventos-link:hover {
     text-decoration: underline;
+}
+
+.eventos-acoes {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 7px;
+    margin: -12px 0 12px;
+}
+
+.eventos-acoes button {
+    min-height: 28px;
+    padding: 3px 9px;
+    border: 0;
+    border-radius: 6px;
+    color: #17491d;
+    font: 12px var(--font-itim);
+    cursor: pointer;
+}
+
+.evento-adicionar {
+    background: #b7e7bc;
+}
+
+.evento-gerenciar {
+    background: #ff7b83;
+}
+
+.eventos-acoes button:hover,
+.eventos-modal-rodape button:hover,
+.evento-gerenciavel-acoes button:hover {
+    filter: brightness(0.96);
+}
+
+.calendario-modal-fundo[hidden] {
+    display: none;
+}
+
+.calendario-modal-fundo {
+    position: fixed;
+    z-index: 10000;
+    inset: 0;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.48);
+}
+
+.calendario-modal-form-fundo {
+    z-index: 10001;
+}
+
+.calendario-modal-aberto {
+    overflow: hidden;
+}
+
+.eventos-modal {
+    box-sizing: border-box;
+    width: min(820px, 100%);
+    max-height: min(90vh, 760px);
+    overflow-y: auto;
+    padding: 24px;
+    border-radius: 8px;
+    background: #fff9f9;
+    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.28);
+    color: #111;
+    font-family: var(--font-itim);
+}
+
+.eventos-modal-form {
+    width: min(540px, 100%);
+    padding: 24px 30px;
+}
+
+.eventos-modal-cabecalho {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding-right: 32px;
+}
+
+.eventos-modal-icone {
+    display: inline-flex;
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7px;
+    background: #fff;
+}
+
+.eventos-modal-icone svg {
+    width: 32px;
+    height: 32px;
+    fill: #111;
+    stroke: #111;
+    stroke-linejoin: round;
+    stroke-width: 1.4;
+}
+
+.eventos-modal-cabecalho h2 {
+    margin: 0;
+    color: #235925;
+    font: 22px var(--font-itim);
+}
+
+.eventos-modal-cabecalho p,
+.eventos-modal-data,
+.eventos-arraste-ajuda {
+    margin: 4px 0 0;
+    color: #222;
+    font: 13px var(--font-itim);
+}
+
+.eventos-modal-fechar {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    display: inline-flex;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    color: #333;
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.eventos-modal-data {
+    color: #235925;
+    font-size: 15px;
+}
+
+.eventos-arraste-ajuda {
+    margin: 7px 0 14px;
+    color: #666;
+    font-size: 12px;
+}
+
+.eventos-editor-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.evento-gerenciavel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 32px;
+    align-items: center;
+    gap: 14px;
+}
+
+.evento-gerenciavel .evento-card {
+    min-height: 52px;
+    margin: 0;
+    padding: 10px 12px;
+}
+
+.evento-gerenciavel .evento-card strong {
+    font-family: var(--font-itim);
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.evento-gerenciavel .evento-card span,
+.evento-gerenciavel .evento-card p {
+    font-family: var(--font-itim);
+    font-size: 12px;
+}
+
+.evento-gerenciavel-acoes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.evento-gerenciavel-acoes button {
+    display: inline-flex;
+    width: 28px;
+    height: 26px;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+    border: 0;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.evento-item-editar {
+    background: #e85c63;
+}
+
+.evento-item-remover {
+    background: #f3b4b8;
+}
+
+.evento-item-ordenar {
+    background: transparent;
+    cursor: grab !important;
+    touch-action: none;
+}
+
+.evento-item-ordenar:active {
+    cursor: grabbing !important;
+}
+
+.evento-gerenciavel-acoes svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: #111;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+}
+
+.evento-item-ordenar svg {
+    stroke: #88b8ee;
+    stroke-width: 2.4;
+}
+
+.evento-gerenciavel.arrastando {
+    opacity: 0.5;
+}
+
+.evento-gerenciavel.alvo-arraste {
+    outline: 2px dashed #7ca97a;
+    outline-offset: 4px;
+}
+
+.eventos-editor-vazio {
+    margin: 12px 0;
+    color: #666;
+    font: 15px var(--font-itim);
+    text-align: center;
+}
+
+.eventos-modal-feedback {
+    min-height: 0;
+    margin: 8px 0 0;
+    color: #a71921;
+    font: 13px var(--font-itim);
+}
+
+.eventos-modal-feedback:empty {
+    display: none;
+}
+
+.eventos-modal-feedback.sucesso {
+    color: #235925;
+}
+
+.eventos-modal-rodape {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.eventos-modal-rodape button {
+    min-height: 36px;
+    padding: 5px 16px;
+    border: 0;
+    border-radius: 5px;
+    font: 14px var(--font-itim);
+    cursor: pointer;
+}
+
+.eventos-modal-adicionar,
+.eventos-modal-cancelar {
+    background: #e8eee8;
+    color: #235925;
+}
+
+.eventos-modal-salvar-ordem,
+.eventos-modal-salvar {
+    background: #235925;
+    color: #fff;
+}
+
+.eventos-modal-salvar:disabled,
+.eventos-modal-salvar-ordem:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.eventos-modal-form label {
+    display: block;
+    margin: 14px 0 6px;
+    color: #222;
+    font: 14px var(--font-itim);
+}
+
+.eventos-modal-form input,
+.eventos-modal-form textarea,
+.eventos-modal-form select {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 9px 10px;
+    border: 1px solid #c9c9c9;
+    border-radius: 5px;
+    background: #fff;
+    color: #222;
+    font: 14px var(--font-poppins);
+}
+
+.eventos-modal-form input,
+.eventos-modal-form select {
+    height: 38px;
+}
+
+.eventos-modal-form textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.evento-horarios {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.evento-horarios label {
+    margin-bottom: 0;
+}
+
+@media (min-width: 1201px) and (max-width: 1500px) {
+    .calendario-layout {
+        box-sizing: border-box;
+        width: 100%;
+        margin-left: 0;
+        padding: 0 12px;
+        gap: clamp(12px, 1.3vw, 18px);
+    }
+
+    .calendario {
+        box-sizing: border-box;
+        flex: 1 1 0;
+        min-width: 0;
+        max-width: 760px;
+        width: auto;
+        height: auto;
+        margin: 0;
+        padding: 1px 20px 32px;
+    }
+
+    .calendario-cabecalho {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .calendario-grade {
+        grid-template-rows: repeat(7, minmax(48px, 1fr));
+        width: 100%;
+        left: 0;
+        margin-top: 52px;
+        transform: none;
+    }
+
+    .eventos-painel {
+        box-sizing: border-box;
+        flex: 0 0 clamp(240px, 25vw, 300px);
+        height: min(520px, calc(100vh - 160px));
+        min-height: 420px;
+        overflow-y: auto;
+    }
+}
+
+@media (max-width: 1200px) {
+    .calendario-layout {
+        box-sizing: border-box;
+        flex-direction: column;
+        width: min(100%, 760px);
+        margin: 24px auto 0;
+        padding: 0 12px 28px;
+    }
+
+    .calendario {
+        box-sizing: border-box;
+        flex: none;
+        min-width: 0;
+        width: 100%;
+        height: auto;
+        margin: 0 auto;
+        padding: 16px 18px 28px;
+    }
+
+    .calendario-cabecalho {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .calendario-grade {
+        grid-template-rows: repeat(7, minmax(48px, 1fr));
+        width: 100%;
+        left: 0;
+        margin-top: 60px;
+        transform: none;
+    }
+
+    .eventos-painel {
+        box-sizing: border-box;
+        flex: 0 1 auto;
+        width: 100%;
+        max-width: 620px;
+        min-width: 0;
+        height: auto;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 850px) {
+    .calendario-layout {
+        width: calc(100% - 20px);
+        padding: 0;
+    }
+
+    .calendario {
+        padding: 14px 12px 22px;
+    }
+
+    .calendario-grade {
+        grid-template-rows: repeat(7, minmax(48px, 1fr));
+        margin-top: 52px;
+    }
+
+    .calendario-dia-semana,
+    .calendario-data {
+        font-size: 14px;
+    }
+
+    .calendario-data {
+        padding-top: 10px;
+    }
+
+    .calendario-mes {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 520px) {
+    .calendario-grade {
+        grid-template-rows: repeat(7, minmax(42px, 1fr));
+    }
+
+    .calendario-mes {
+        font-size: 16px;
+    }
+
+    .calendario-hoje {
+        width: 62px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 600px) {
+    .eventos-modal {
+        padding: 18px;
+    }
+
+    .eventos-modal-form {
+        padding: 18px 20px;
+    }
+
+    .eventos-modal-cabecalho h2 {
+        font-size: 19px;
+    }
+
+    .evento-gerenciavel {
+        grid-template-columns: minmax(0, 1fr) 28px;
+        gap: 8px;
+    }
+
+    .evento-gerenciavel .evento-card {
+        padding: 9px;
+    }
+
+    .evento-horarios {
+        gap: 8px;
+    }
+
+    .eventos-modal-rodape {
+        flex-wrap: wrap;
+    }
 }

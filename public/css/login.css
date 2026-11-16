@@ -1,3 +1,5 @@
+@import url('./variables.css?v=20261115-fonts');
+
 * {
     margin: 0;
     padding: 0;
@@ -5,7 +7,7 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family: var(--font-itim);
     min-height: 100vh;
     background-color: #68D376;
     display: flex;
@@ -49,8 +51,8 @@ body {
     font-weight: 600;
     color: #1a1a1a;
     text-align: center;
-    margin: 0 auto 10px auto;
-    width: 100%;
+    margin: 0 auto 10px 5vw;
+    width: 50%;
 }
 
 /* Formulário */
@@ -87,6 +89,45 @@ body {
     width: 85%;
     max-width: 520px;
     margin-right: auto;
+}
+
+/* Container para campos com botão de mostrar/ocultar senha */
+.senha-wrapper {
+    position: relative;
+    width: 85%;
+    max-width: 520px;
+    margin-right: auto;
+}
+
+.senha-input {
+    width: 100%;
+    margin-right: 0;
+    max-width: none;
+    padding-right: 72px;
+}
+
+.senha-toggle {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    border: 0;
+    background: transparent;
+    color: #7b818a;
+    padding: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.senha-toggle:hover {
+    color: #4b5563;
+}
+
+.senha-toggle:focus {
+    outline: 2px solid rgba(107, 114, 128, 0.25);
+    border-radius: 4px;
 }
 
 .form-input:focus {
@@ -182,7 +223,7 @@ body {
 /* Decoração - Imagem na direita */
 .login-decoration {
     position: fixed;
-    right: -250px;
+    right: -350px;
     top: 50%;
     transform: translateY(-50%);
     height: 120vh;
@@ -275,6 +316,10 @@ body {
 }
 .form-row .form-group {
     flex: 1 1 50%;
+}
+.form-row .senha-wrapper {
+    width: 100%;
+    max-width: none;
 }
 .form-row .form-group .form-input {
     width: 100%;

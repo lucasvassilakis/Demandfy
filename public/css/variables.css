@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
+
 :root {
     /* CORES PRIMÁRIAS */
     --primary-green: #235925;
@@ -85,6 +87,6 @@
 
     /* FAMILY FONTS */
     --font-itim: 'Itim', sans-serif;
-    --font-poppins: 'Poppins', sans-serif;
+    --font-poppins: var(--font-itim);
     --font-arial: Arial, sans-serif;
 }

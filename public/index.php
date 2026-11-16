@@ -34,4 +34,7 @@ new Rota();
 </div>
 <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
 <script>
-  new window.VLibras.Widget('https://vlibras.gov.br/app');
+  if (window.VLibras) {
+    new window.VLibras.Widget('https://vlibras.gov.br/app');
+  }
+</script>

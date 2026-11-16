@@ -1,0 +1,91 @@
+body.tema-escuro {
+    background: #161b18;
+    color: #edf2ee;
+    color-scheme: dark;
+}
+
+body.tema-escuro .sidebar {
+    background: #202722;
+}
+
+body.tema-escuro .nav-link {
+    color: #edf2ee;
+}
+
+body.tema-escuro .nav-text,
+body.tema-escuro .search-input {
+    background: #343c36;
+    color: #edf2ee;
+}
+
+body.tema-escuro .nav-link.active .nav-text {
+    background: #345b3b;
+}
+
+body.tema-escuro main:not(.configuracoes-pagina) {
+    color: #edf2ee;
+}
+
+body.tema-escuro .card,
+body.tema-escuro .conteudo-pagina,
+body.tema-escuro .painel,
+body.tema-escuro .notificacoes-panel,
+body.tema-escuro .avisos,
+body.tema-escuro .calendario,
+body.tema-escuro .eventos-painel,
+body.tema-escuro .sugestoes .card {
+    background-color: #252d28;
+    color: #edf2ee;
+}
+
+body.tema-escuro .card h2,
+body.tema-escuro .card h3,
+body.tema-escuro .notificacao-conteudo h2,
+body.tema-escuro .notificacao-conteudo p,
+body.tema-escuro .aviso,
+body.tema-escuro .conteudo h2,
+body.tema-escuro .conteudo p {
+    color: #edf2ee;
+}
+
+body.tema-escuro input:not([type="checkbox"]):not([type="radio"]),
+body.tema-escuro textarea,
+body.tema-escuro select {
+    background-color: #303a33;
+    color: #edf2ee;
+}
+
+body.tema-escuro .configuracoes-pagina {
+    background: #1b2b20;
+}
+
+body.tema-escuro .configuracoes-titulo {
+    color: #f3f6f3;
+}
+
+body.tema-escuro .configuracoes-painel {
+    background: #252d28;
+}
+
+body.tema-escuro .configuracoes-cartao {
+    background: #303a33;
+}
+
+body.tema-escuro .configuracoes-cartao-titulo h2,
+body.tema-escuro .senha-campo label {
+    color: #f3f6f3;
+}
+
+body.tema-escuro .preferencia-alternancia {
+    background: #424a45;
+    color: #f3f6f3;
+}
+
+body.tema-escuro .senha-controle input {
+    background: #1e2520;
+    color: #f3f6f3;
+}
+
+body.tema-escuro .configuracoes-salvar {
+    color: #102113;
+}

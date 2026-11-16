@@ -1,8 +1,8 @@
 /* 1. VARI�VEIS CSS */
-@import url('./variables.css');
+@import url('./variables.css?v=20261115-fonts');
 
 /* 2. RESET GLOBAL */
-@import url('./reset.css');
+@import url('./reset.css?v=20261115-fonts');
 
 /* 3. TIPOGRAFIA */
 @import url('./typography.css');
@@ -18,5 +18,3 @@
 @import url('./components/notifications.css');
 @import url('./components/backend.css');
 
-/* 6. MEDIA QUERIES */
-@import url('./responsive.css');
